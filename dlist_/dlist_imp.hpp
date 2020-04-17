@@ -73,29 +73,36 @@ template<typename T> const T& dlist<T>::front() const { return first->data; }
 
 // Operators.
 template<typename T> dlist<T>& dlist<T>::operator=(const dlist<T>& other) {
-	node* current_other = other.first;
-	node* current_this = 0;
-	while(current_other) {
-		node* old_this = current_this;
-		current_this = new node;
-		current_this->data = current_other->data;
-		if(old_this)
-			old_this->next = current_this;
-		else
-			first = current_this;
-		current_other = current_other->next;
+	if(this != &other) {
+		node* current_other = other.first;
+		node* current_this = 0;
+		while(current_other) {
+			node* old_this = current_this;
+			current_this = new node;
+			current_this->data = current_other->data;
+			if(old_this)
+				old_this->next = current_this;
+			else
+				first = current_this;
+			current_other = current_other->next;
+		}
+		last = current_this;
+		last->next = 0;
+		sz = other.sz;
 	}
-	last = current_this;
-	last->next = 0;
-	sz = other.sz;
+
 	return *this;
 }
 template<typename T> dlist<T>& dlist<T>::operator=(dlist<T>&& other) {
-	first = other.first;
-	last = other.last;
-	sz = other.sz;
-	other.first = other.last = nullptr;
-	other.sz = 0;
+	if(this != &other) {
+		first = other.first;
+		last = other.last;
+		sz = other.sz;
+		other.first = other.last = nullptr;
+		other.sz = 0;
+	}
+
+	return *this;
 }
 template<typename T> bool dlist<T>::operator==(const dlist<T>& other) const {
 	if(sz != other.sz) return false;

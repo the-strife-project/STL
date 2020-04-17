@@ -116,20 +116,26 @@ template<typename T> void vector<T>::clear() {
 
 // Operators.
 template<typename T> vector<T>& vector<T>::operator=(const vector<T>& other) {
-	clear();
+	if(this != &other) {
+		clear();
 
-	sz = other.sz;
-	allocated = other.allocated;
+		sz = other.sz;
+		allocated = other.allocated;
 
-	data = new T[allocated];
-	for(size_t i=0; i<sz; i++) data[i] = other.data[i];
+		data = new T[allocated];
+		for(size_t i=0; i<sz; i++) data[i] = other.data[i];
+	}
+
 	return *this;
 }
 template<typename T> vector<T>& vector<T>::operator=(vector<T>&& other) {
-	sz = other.sz;
-	allocated = other.allocated;
-	data = other.data;
-	other.data = nullptr;
+	if(this != &other) {
+		sz = other.sz;
+		allocated = other.allocated;
+		data = other.data;
+		other.data = nullptr;
+	}
+
 	return *this;
 }
 template<typename T> T& vector<T>::operator[](size_t idx) { return data[idx]; }
