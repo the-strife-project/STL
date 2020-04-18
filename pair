@@ -1,1 +1,13 @@
-#include <klibc/STL/pair_/pair.hpp>
+#ifndef PAIR_H
+#define PAIR_H
+
+/*
+	This doesn't deserve an implementation.
+*/
+
+template<typename T, typename Q> struct pair {
+	T f;
+	Q s;
+};
+
+#endif

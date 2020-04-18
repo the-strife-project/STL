@@ -1,1 +1,1 @@
-#include <klibc/STL/bitmap_/bitmap.hpp>
+#include <klibc/STL/implementations/bitmap.hpp>
