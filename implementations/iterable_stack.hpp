@@ -1,7 +1,7 @@
 #ifndef ITERABLE_STACK_H
 #define ITERABLE_STACK_H
 
-#include <klibc/STL/stack>
+#include <kernel/klibc/STL/stack>
 
 template<typename T> class iterable_stack : public stack<T> {
 public:

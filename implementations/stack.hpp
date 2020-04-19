@@ -2,7 +2,7 @@
 #define STACK_H
 
 #include <common/types.hpp>
-#include <klibc/STL/list>
+#include <kernel/klibc/STL/list>
 
 template<typename T> class stack {
 protected:	// Protected for "iterable_stack".

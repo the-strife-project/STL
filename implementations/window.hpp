@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <klibc/STL/iterable_stack>
+#include <kernel/klibc/STL/iterable_stack>
 
 template<typename T> class window {
 private:

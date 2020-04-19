@@ -2,7 +2,7 @@
 #define QUEUE_H
 
 #include <common/types.hpp>
-#include <klibc/STL/list>
+#include <kernel/klibc/STL/list>
 
 template<typename T> class queue {
 private:
