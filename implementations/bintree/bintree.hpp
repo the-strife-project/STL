@@ -144,23 +144,23 @@ public:
 	}
 
 	// Prune.
-	void prune_left(node n, bintree<T>& orig) {
+	void prune_left(node n, bintree<T>& dest) {
 		if(n.null()) return;
 
-		destroy(orig._root);
-		orig._root = n.left();
-		if(!orig._root.null())
-			orig._root.parent(node());
+		destroy(dest._root);
+		dest._root = n.left();
+		if(!dest._root.null())
+			dest._root.parent(node());
 		n.left(node());
 	}
 
-	void prune_right(node n, bintree<T>& orig) {
+	void prune_right(node n, bintree<T>& dest) {
 		if(n.null()) return;
 
-		destroy(orig._root);
-		orig._root = n.right();
-		if(!orig._root().null())
-			orig._root.parent(node());
+		destroy(dest._root);
+		dest._root = n.right();
+		if(!dest._root().null())
+			dest._root.parent(node());
 		n.right(node());
 	}
 
