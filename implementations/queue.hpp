@@ -13,6 +13,10 @@ public:
 		return data.size();
 	}
 
+	inline bool empty() const {
+		return data.size() == 0;
+	}
+
 	inline void push(T e) {
 		data.push_back(e);
 	}
@@ -35,6 +39,12 @@ public:
 
 	inline void pop() {
 		data.pop_front();
+	}
+
+	inline T frontpop() {
+		T ret = data.front();
+		data.pop_front();
+		return ret;
 	}
 
 	inline bool operator==(const queue<T>& other) const {
