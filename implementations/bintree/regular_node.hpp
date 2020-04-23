@@ -13,7 +13,7 @@
 template<typename T, typename _node> class bintree;
 
 template<typename T> class _regular_bintree_node {
-private:
+protected:
 	friend class bintree<T, _regular_bintree_node>;
 	typedef _regular_bintree_node node;
 

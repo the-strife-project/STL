@@ -1,7 +1,3 @@
-/*
-	This template implements a binary tree.
-*/
-
 #ifndef BINTREE_H
 #define BINTREE_H
 
@@ -16,12 +12,11 @@
 	I make this as an external class so that the bintree receives
 	a typename of the node, which would be _regular_bintree_node in most cases.
 */
-
 template<typename T, typename _node=_regular_bintree_node<T>> class bintree {
 public:
 	typedef _node node;
 
-private:
+protected:
 	typedef typename node::realnode realnode;
 
 	node _root;
@@ -35,7 +30,7 @@ private:
 		}
 	}
 
-	void copy(node& dest, node& orig) {
+	void copy(node& dest, node orig) {
 		if(orig.null()) {
 			dest = node();
 			return;
@@ -86,8 +81,13 @@ public:
 	bintree(const T& root_tag)
 		: _root(root_tag) {}
 
-	bintree(const bintree<T>& other) {
+	bintree(const bintree<T, _node>& other) {
 		*this = other;
+	}
+
+	bintree(bintree<T, _node>&& other) {
+		_root = other._root;
+		other._root = node();
 	}
 
 	~bintree() {
@@ -113,7 +113,7 @@ public:
 	}
 
 	// Graft and insert.
-	void graft_left(node n, bintree<T>& branch) {
+	void graft_left(node n, bintree<T, _node>& branch) {
 		if(n.null()) return;
 
 		destroy(node(n.left()));
@@ -124,11 +124,11 @@ public:
 	}
 
 	inline void insert_left(node n, const T& tag) {
-		bintree<T> aux(tag);
+		bintree<T, _node> aux(tag);
 		graft_left(n, aux);
 	}
 
-	void graft_right(node n, bintree<T>& branch) {
+	void graft_right(node n, bintree<T, _node>& branch) {
 		if(n.null()) return;
 
 		destroy(node(n.right()));
@@ -139,12 +139,12 @@ public:
 	}
 
 	inline void insert_right(node n, const T& tag) {
-		bintree<T> aux(tag);
+		bintree<T, _node> aux(tag);
 		graft_right(n, aux);
 	}
 
 	// Prune.
-	void prune_left(node n, bintree<T>& dest) {
+	void prune_left(node n, bintree<T, _node>& dest) {
 		if(n.null()) return;
 
 		destroy(dest._root);
@@ -154,17 +154,17 @@ public:
 		n.left(node());
 	}
 
-	void prune_right(node n, bintree<T>& dest) {
+	void prune_right(node n, bintree<T, _node>& dest) {
 		if(n.null()) return;
 
 		destroy(dest._root);
 		dest._root = n.right();
-		if(!dest._root().null())
+		if(!dest._root.null())
 			dest._root.parent(node());
 		n.right(node());
 	}
 
-	void assign_subtree(const bintree<T>& tree, node n) {
+	void assign_subtree(const bintree<T, _node>& tree, node n) {
 		if(this != &tree) {
 			// Not this tree.
 			destroy(_root);
@@ -190,10 +190,10 @@ public:
 	}
 
 	// Operators.
-	bintree<T>& operator=(const bintree<T>& other) {
+	bintree<T, _node>& operator=(const bintree<T, _node>& other) {
 		if(this != &other) {
 			destroy(_root);
-			copy(_root, other._root);
+			copy(_root, other.root());
 			if(!_root.null())
 				_root.parent(node());
 		}
@@ -201,16 +201,26 @@ public:
 		return *this;
 	}
 
-	inline bool operator==(const bintree<T>& other) const {
+	inline bool operator==(const bintree<T, _node>& other) const {
 		return equals(_root, other._root);
 	}
 
-	inline bool operator!=(const bintree<T>& other) const {
+	inline bool operator!=(const bintree<T, _node>& other) const {
 		return !equals(_root, other._root);
 	}
 
 	// Iterators.
 	#include <kernel/klibc/STL/implementations/bintree/iterators.hpp>
+
+protected:
+	// Protected methods for use in derived classes (BST lmao).
+	inline realnode* getRealnode(node n) {
+		return n.data;
+	}
+
+	inline node getCur(_template_inorder_iterator it) {
+		return it.cur;
+	}
 };
 
 #endif

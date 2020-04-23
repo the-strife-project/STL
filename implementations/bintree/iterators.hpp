@@ -14,17 +14,19 @@
 */
 class _template_iterator {
 protected:
+	friend class bintree<T, node>;
 	node cur;
+
+public:
+	_template_iterator() = default;
 
 	_template_iterator(node n)
 		: cur(n)
 	{}
 
-	friend class bintree<T>;
-
-public:
-	_template_iterator() = default;
 	_template_iterator(const _template_iterator& other) = default;
+
+	virtual _template_iterator& operator++() = 0;
 
 	inline bool operator==(const _template_iterator& other) const {
 		return (cur == other.cur);
