@@ -14,7 +14,6 @@
 */
 class _template_iterator {
 protected:
-	friend class bintree<T, node>;
 	node cur;
 
 public:
@@ -25,6 +24,10 @@ public:
 	{}
 
 	_template_iterator(const _template_iterator& other) = default;
+
+	node getNode() const {
+		return cur;
+	}
 
 	virtual _template_iterator& operator++() = 0;
 
@@ -275,8 +278,6 @@ protected:
 	_template_level_iterator(node n) {
 		q.push(n);
 	}
-
-	friend class bintree<T>;
 
 public:
 	_template_level_iterator() = default;

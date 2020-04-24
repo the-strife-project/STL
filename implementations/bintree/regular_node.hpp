@@ -13,8 +13,7 @@
 template<typename T, typename _node> class bintree;
 
 template<typename T> class _regular_bintree_node {
-protected:
-	friend class bintree<T, _regular_bintree_node>;
+private:
 	typedef _regular_bintree_node node;
 
 	struct realnode {
@@ -30,19 +29,6 @@ protected:
 	};
 
 	realnode* data;
-
-	// Private methods.
-	inline void parent(node n) {
-		data->parent = n;
-	}
-
-	inline void left(node n) {
-		data->left = n;
-	}
-
-	inline void right(node n) {
-		data->right = n;
-	}
 
 public:
 	_regular_bintree_node()
@@ -65,12 +51,29 @@ public:
 		return data->parent;
 	}
 
+	inline void parent(node n) {
+		data->parent = n;
+	}
+
 	inline node left() const {
 		return data->left;
 	}
 
+	inline void left(node n) {
+		data->left = n;
+	}
+
 	inline node right() const {
 		return data->right;
+	}
+
+	inline void right(node n) {
+		data->right = n;
+	}
+
+	inline void destroy() {
+		delete data;
+		data = nullptr;
 	}
 
 	inline T& operator*() {
@@ -79,11 +82,6 @@ public:
 
 	inline const T& operator*() const {
 		return data->tag;
-	}
-
-	inline void remove() {
-		delete data;
-		data = nullptr;
 	}
 
 	inline node& operator=(const node& other) {

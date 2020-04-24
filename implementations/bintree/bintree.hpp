@@ -16,9 +16,7 @@ template<typename T, typename _node=_regular_bintree_node<T>> class bintree {
 public:
 	typedef _node node;
 
-protected:
-	typedef typename node::realnode realnode;
-
+private:
 	node _root;
 
 	// Private methods
@@ -26,7 +24,7 @@ protected:
 		if(!n.null()) {
 			destroy(n.left());
 			destroy(n.right());
-			n.remove();
+			n.destroy();
 		}
 	}
 
@@ -99,6 +97,10 @@ public:
 		return _root;
 	}
 
+	inline void root(node n) {
+		_root = n;
+	}
+
 	inline size_t size() const {
 		return count(_root);
 	}
@@ -116,7 +118,7 @@ public:
 	void graft_left(node n, bintree<T, _node>& branch) {
 		if(n.null()) return;
 
-		destroy(node(n.left()));
+		destroy(n.left());
 		n.left(branch._root);
 		if(!n.left().null())
 			n.left().parent(n);
@@ -131,7 +133,7 @@ public:
 	void graft_right(node n, bintree<T, _node>& branch) {
 		if(n.null()) return;
 
-		destroy(node(n.right()));
+		destroy(n.right());
 		n.right(branch._root);
 		if(!n.right().null())
 			n.right().parent(n);
@@ -211,16 +213,6 @@ public:
 
 	// Iterators.
 	#include <kernel/klibc/STL/implementations/bintree/iterators.hpp>
-
-protected:
-	// Protected methods for use in derived classes (BST lmao).
-	inline realnode* getRealnode(node n) {
-		return n.data;
-	}
-
-	inline node getCur(_template_inorder_iterator it) {
-		return it.cur;
-	}
 };
 
 #endif

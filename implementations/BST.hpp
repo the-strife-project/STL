@@ -8,13 +8,7 @@ template<typename T, typename _node=_regular_bintree_node<T>> class BST {
 protected:
 	typedef _node node;
 
-	class tree : public bintree<T, node> {
-	public:
-		friend class BST<T, node>;
-		using bintree<T, node>::bintree;
-	};
-
-	tree data;
+	bintree<T, node> data;
 	size_t _size;
 
 	/*
@@ -110,35 +104,49 @@ public:
 
 		if(n.left().null() && n.right().null()) {
 			// Leaf. Just remove it.
-			if(parent.left() == n)
+			if(parent.null())
+				data.clear();
+			else if(parent.left() == n)
 				data.prune_left(parent, aux);
 			else
 				data.prune_right(parent, aux);
 		} else if(n.left().null() || n.right().null()) {
 			// One child. Substitute.
-			// TODO NOW: MAKE THIS SHORTER
-			if(parent.left() == n) {
-				// n is at the left of parent.
-				data.prune_left(parent, aux);
-				bintree<T, node> branch;
-				if(!aux.root().left().null())
-					branch.assign_subtree(aux, aux.root().left());
+			if(parent.null()) {
+				// Special case: it's the root.
+				if(!n.left().null())
+					data.prune_left(n, aux);
 				else
-					branch.assign_subtree(aux, aux.root().right());
-				data.graft_left(parent, branch);
-			} else {
-				// n is at the right of parent.
-				data.prune_right(parent, aux);
-				bintree<T, node> branch;
-				if(!aux.root().left().null())
-					branch.assign_subtree(aux, aux.root().left());
-				else
-					branch.assign_subtree(aux, aux.root().right());
-				data.graft_right(parent, branch);
+					data.prune_right(n, aux);
+
+				data.root(aux.root());
+				aux.root(node());
+
+				// n is now loose. Destroy it.
+				n.destroy();
+
+				--_size;
+				return;
 			}
+
+			bool left = (parent.left() == n);
+			if(left)
+				data.prune_left(parent, aux);
+			else
+				data.prune_right(parent, aux);
+
+			bintree<T, node> branch;
+			if(!aux.root().left().null())
+				aux.prune_left(aux.root(), branch);
+			else
+				aux.prune_right(aux.root(), branch);
+
+			if(left)
+				data.graft_left(parent, branch);
+			else
+				data.graft_right(parent, branch);
 		} else {
 			// Two children.
-
 			// [0] Find the immediate next node (by value).
 			node next = n.right();
 			while(!next.left().null())
@@ -148,10 +156,10 @@ public:
 			data.prune_left(n, aux);
 			data.graft_left(next, aux);
 
-			// If the parent of next is not n...
-			if(next.parent() != n) {
+			// If the parent of next exists (it's not the root) and is not n...
+			if(!next.parent().null() && next.parent() != n) {
 				// [2] Drop the parent of next's left (pointer to next).
-				data.getRealnode(next.parent())->left = node();
+				next.parent().left(node());
 
 				// [3] The parent of next's left will be next's right.
 				data.prune_right(next, aux);
@@ -166,19 +174,19 @@ public:
 			//     And the parent of next is now n's.
 			if(!n.parent().null()) {
 				if(n.parent().left() == n)
-					data.getRealnode(n.parent())->left = next;
+					n.parent().left(next);
 				else
-					data.getRealnode(n.parent())->right = next;
+					n.parent().right(next);
 
-				data.getRealnode(next)->parent = n.parent();
+				next.parent(n.parent());
 			} else {
 				// If it doesn't exist, n was the root.
-				data.getRealnode(next)->parent = node();
-				data._root = next;
+				next.parent(node());
+				data.root(next);
 			}
 
 			// [6] n is now loose. Destroy it.
-			n.remove();
+			n.destroy();
 		}
 
 		--_size;
@@ -195,8 +203,7 @@ public:
 		iterator ret = it;
 		++ret;
 
-		erase(data.getCur(it));
-
+		erase(it.getNode());
 		return ret;
 	}
 
