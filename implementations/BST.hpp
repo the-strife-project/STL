@@ -37,62 +37,40 @@ protected:
 		return pair<bool, node>(false, parent);
 	}
 
-public:
-	// Iterators. Trivial.
-	typedef typename bintree<T, node>::inorder_iterator iterator;
-	typedef typename bintree<T, node>::const_inorder_iterator const_iterator;
-
-	inline iterator begin() {
-		return data.begin_inorder();
-	}
-
-	inline iterator end() {
-		return data.end_inorder();
-	}
-
-	inline const_iterator begin() const {
-		return data.begin_inorder();
-	}
-
-	inline const_iterator end() const {
-		return data.begin_inorder();
-	}
-
-
-	// Methods.
-	inline size_t size() const {
-		return _size;
-	}
-
-	inline bool empty() const {
-		return (_size == 0);
-	}
-
-	inline void clear() {
-		data.clear();
-		_size = 0;
-	}
-
-	virtual void insert(const T& e) {
+	/*
+		Function to insert a value.
+		Returns the inserted node.
+	*/
+	virtual node _insert(const T& e) {
 		pair<bool, node> found = _find(e);
 
+		node ret;
 		if(found.s.null()) {
 			// There's no root.
 			data = e;
+			ret = data.root();
 		} else {
 			if(found.f)
-				return;
+				return node();
 
-			if(e < *(found.s))
+			if(e < *(found.s)) {
 				data.insert_left(found.s, e);
-			else
+				ret = found.s.left();
+			} else {
 				data.insert_right(found.s, e);
+				ret = found.s.right();
+			}
 		}
 
 		++_size;
+		return ret;
 	}
 
-	virtual void erase(node n) {
+	/*
+		Function to delete a node.
+		Returns its parent.
+	*/
+	virtual node _erase(node n) {
 		/*
 			Three scenarios:
 			- Leaf (no children).
@@ -126,7 +104,7 @@ public:
 				n.destroy();
 
 				--_size;
-				return;
+				return parent;
 			}
 
 			bool left = (parent.left() == n);
@@ -190,21 +168,62 @@ public:
 		}
 
 		--_size;
+		return parent;
 	}
 
-	inline bool erase(const T& e) {
-		pair<bool, node> found = _find(e);
-		if(found.f)
-			erase(found.s);
-		return found.f;
+public:
+	// Iterators. Trivial.
+	typedef typename bintree<T, node>::inorder_iterator iterator;
+	typedef typename bintree<T, node>::const_inorder_iterator const_iterator;
+
+	inline iterator begin() {
+		return data.begin_inorder();
+	}
+
+	inline iterator end() {
+		return data.end_inorder();
+	}
+
+	inline const_iterator begin() const {
+		return data.begin_inorder();
+	}
+
+	inline const_iterator end() const {
+		return data.begin_inorder();
+	}
+
+
+	// Methods.
+	inline size_t size() const {
+		return _size;
+	}
+
+	inline bool empty() const {
+		return (_size == 0);
+	}
+
+	inline void clear() {
+		data.clear();
+		_size = 0;
+	}
+
+	inline iterator insert(const T& e) {
+		return iterator(_insert(e));
 	}
 
 	iterator erase(iterator it) {
 		iterator ret = it;
 		++ret;
 
-		erase(it.getNode());
+		_erase(it.getNode());
 		return ret;
+	}
+
+	inline bool erase(const T& e) {
+		pair<bool, node> found = _find(e);
+		if(found.f)
+			_erase(found.s);
+		return found.f;
 	}
 
 	iterator find(const T& e) {
