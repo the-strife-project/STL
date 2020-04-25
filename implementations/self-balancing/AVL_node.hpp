@@ -1,24 +1,22 @@
-#ifndef BINTREE_REGULAR_NODE
-#define BINTREE_REGULAR_NODE
+#ifndef AVLNODE_HPP
+#define AVLNODE_HPP
 
 /*
-	This defines a regular bintree node.
-	That is, one for use in, for instance, the AVL.
-	Red-Black requires another one.
-
-	Any other node must be implemented similar to this,
-	giving friend access to bintree, etc.
+	This defines a node for an AVL tree.
+	The only difference with _regular_bintree_node is that
+	this one saves the height.
 */
 
-template<typename T> class _regular_bintree_node {
+template<typename T> class _AVL_node {
 private:
-	typedef _regular_bintree_node node;
+	typedef _AVL_node node;
 
 	struct realnode {
 		T tag;
 		node parent;
 		node left;
 		node right;
+		size_t height;
 
 		realnode() {}
 		realnode(const T& tag)
@@ -29,15 +27,16 @@ private:
 	realnode* data;
 
 public:
-	_regular_bintree_node()
+	_AVL_node()
 		: data(nullptr)
 	{}
 
-	_regular_bintree_node(const T& tag) {
+	_AVL_node(const T& tag) {
 		data = new realnode(tag);
+		data->height = 1;	// Default height is one.
 	}
 
-	_regular_bintree_node(const node& other)
+	_AVL_node(const node& other)
 		: data(other.data)
 	{}
 
@@ -67,6 +66,31 @@ public:
 
 	inline void right(node n) {
 		data->right = n;
+	}
+
+	inline size_t height() const {
+		return data->height;
+	}
+
+	inline void height(size_t x) {
+		data->height = x;
+	}
+
+	pair<size_t, size_t> recomputeHeight() {
+		size_t left_height, right_height;
+		left_height = right_height = 0;
+
+		if(!left().null())
+			left_height = left().height();
+		if(!right().null())
+			right_height = right().height();
+
+		if(left_height > right_height)
+			height(left_height + 1);
+		else
+			height(right_height + 1);
+
+		return pair<size_t, size_t>(left_height, right_height);
 	}
 
 	inline void destroy() {
