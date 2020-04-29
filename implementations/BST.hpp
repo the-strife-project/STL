@@ -66,11 +66,7 @@ protected:
 		return ret;
 	}
 
-	/*
-		Function to delete a node.
-		Returns its parent.
-	*/
-	virtual node _erase(node n) {
+	virtual void _erase(node n) {
 		/*
 			Three scenarios:
 			- Leaf (no children).
@@ -81,94 +77,118 @@ protected:
 		bintree<T, node> aux;
 
 		if(n.left().null() && n.right().null()) {
-			// Leaf. Just remove it.
-			if(parent.null())
+			// Leaf. Just remove it. ret will be null.
+			if(parent.null()) {
 				data.clear();
-			else if(parent.left() == n)
-				data.prune_left(parent, aux);
-			else
-				data.prune_right(parent, aux);
+			} else if(parent.left() == n) {
+				parent.left(node());
+				n.destroy();
+			} else {
+				parent.right(node());
+				n.destroy();
+			}
 		} else if(n.left().null() || n.right().null()) {
 			// One child. Substitute.
 			if(parent.null()) {
 				// Special case: it's the root.
 				if(!n.left().null())
-					data.prune_left(n, aux);
+					data.root(n.left());
 				else
-					data.prune_right(n, aux);
+					data.root(n.right());
 
-				data.root(aux.root());
-				aux.root(node());
-
-				// n is now loose. Destroy it.
 				n.destroy();
+			} else {
+				// It's not the root.
+				if(!n.left().null()) {
+					if(n.parent().left() == n)
+						n.parent().left(n.left());
+					else
+						n.parent().right(n.left());
+					n.left().parent(n.parent());
+				} else {
+					if(n.parent().left() == n)
+						n.parent().left(n.right());
+					else
+						n.parent().right(n.right());
+					n.right().parent(n.parent());
+				}
 
-				--_size;
-				return parent;
+				n.destroy();
 			}
-
-			bool left = (parent.left() == n);
-			if(left)
-				data.prune_left(parent, aux);
-			else
-				data.prune_right(parent, aux);
-
-			bintree<T, node> branch;
-			if(!aux.root().left().null())
-				aux.prune_left(aux.root(), branch);
-			else
-				aux.prune_right(aux.root(), branch);
-
-			if(left)
-				data.graft_left(parent, branch);
-			else
-				data.graft_right(parent, branch);
 		} else {
-			// Two children.
-			// [0] Find the immediate next node (by value).
+			/*
+				Two children.
+				The usual case for this is to COPY next's tag to n and recurse.
+				However, that invalidates all iterators. Which is not cool.
+				What I am doing is swapping n and next, instead of copying, and
+				then recurse.
+			*/
+
+			// Find the immediate next node (by value).
 			node next = n.right();
 			while(!next.left().null())
 				next = next.left();
 
-			// [1] next's left will be the one from n.
-			data.prune_left(n, aux);
-			data.graft_left(next, aux);
+			_swap(n, next);
+			parent = n.parent();
 
-			// If the parent of next exists (it's not the root) and is not n...
-			if(!next.parent().null() && next.parent() != n) {
-				// [2] Drop the parent of next's left (pointer to next).
-				next.parent().left(node());
-
-				// [3] The parent of next's left will be next's right.
-				data.prune_right(next, aux);
-				data.graft_left(next.parent(), aux);
-
-				// [4] next's right will be the n's right.
-				data.prune_right(n, aux);
-				data.graft_right(next, aux);
-			}
-
-			// [5] n's parent (left or right), if exists, now points to next.
-			//     And the parent of next is now n's.
-			if(!n.parent().null()) {
-				if(n.parent().left() == n)
-					n.parent().left(next);
-				else
-					n.parent().right(next);
-
-				next.parent(n.parent());
-			} else {
-				// If it doesn't exist, n was the root.
-				next.parent(node());
-				data.root(next);
-			}
-
-			// [6] n is now loose. Destroy it.
-			n.destroy();
+			// Recurse.
+			_erase(n);
+			++_size;	// Do not substract twice.
 		}
 
 		--_size;
-		return parent;
+	}
+
+	// Swaps a node (a) with either its predecessor or its successor (b).
+	void _swap(node a, node b) {
+		// Swap collateral.
+		if(!a.parent().null()) {
+			if(a.parent().left() == a)
+				a.parent().left(b);
+			else
+				a.parent().right(b);
+		} else {
+			data.root(b);
+		}
+
+		if(b.parent() != a) {
+			if(b.parent().left() == b)
+				b.parent().left(a);
+			else
+				b.parent().right(a);
+		}
+
+		if(!b.left().null())
+			b.left().parent(a);
+		if(!b.right().null())
+			b.right().parent(a);
+		if(!a.left().null() && a.left() != b)
+			a.left().parent(b);
+		if(!a.right().null() && a.right() != b)
+			a.right().parent(b);
+
+		// Swap.
+		node p_aux = a.parent();
+		if(b.parent() != a)
+			a.parent(b.parent());
+		else
+			a.parent(b);
+		b.parent(p_aux);
+
+		node l_aux = a.left();
+		a.left(b.left());
+		if(l_aux != b)
+			b.left(l_aux);
+		else
+			b.left(a);
+
+		node r_aux = a.right();
+		a.right(b.right());
+		if(r_aux != b)
+			b.right(r_aux);
+		else
+			b.right(a);
 	}
 
 public:
@@ -194,6 +214,10 @@ public:
 
 
 	// Methods.
+	BST()
+		: _size(0)
+	{}
+
 	inline size_t size() const {
 		return _size;
 	}

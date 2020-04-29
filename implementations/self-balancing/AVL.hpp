@@ -77,15 +77,15 @@ private:
 	}
 
 	inline node _insert(const T& e) override {
-		node inserted = RotationTree<T, node>::_insert(e);
+		node inserted = BST<T, node>::_insert(e);
 		ballance(inserted.parent());
 		return inserted;
 	}
 
-	inline node _erase(node n) override {
-		node parent = RotationTree<T, node>::_erase(n);
+	inline void _erase(node n) override {
+		node parent = n.parent();
+		BST<T, node>::_erase(n);
 		ballance(parent);
-		return parent;
 	}
 };
 
