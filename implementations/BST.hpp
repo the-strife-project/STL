@@ -96,7 +96,7 @@ protected:
 				else
 					data.root(n.right());
 
-				n.destroy();
+				data.root().parent(node());
 			} else {
 				// It's not the root.
 				if(!n.left().null()) {

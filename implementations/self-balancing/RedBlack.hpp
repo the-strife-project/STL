@@ -116,7 +116,12 @@ private:
 		} else if(n.left().null() || n.right().null()) {
 			// One child.
 			if(n.parent().null()) {
-				// Root. Just delete it.
+				// Root. Just delete it and make the next one black.
+				if(!n.left().null())
+					n.left().color(BLACK);
+				else
+					n.right().color(BLACK);
+
 				BST<T, node>::_erase(n);
 			} else {
 				// Not the root.
