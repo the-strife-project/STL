@@ -4,21 +4,14 @@
 #include <kernel/klibc/STL/implementations/self-balancing/AVL_node.hpp>
 #include <kernel/klibc/STL/implementations/self-balancing/RotationTree.hpp>
 
-size_t max(size_t a, size_t b) {
-	if(a > b)
-		return a;
-	else
-		return b;
-}
-
 int abs(int a) {
 	if(a < 0)
 		a = -a;
 	return a;
 }
 
-template<typename T> class AVL : public RotationTree<T, _AVL_node<T>> {
-private:
+template<typename T, typename Compare=less<T>> class AVL : public RotationTree<T, _AVL_node<T>, Compare> {
+protected:
 	typedef _AVL_node<T> node;
 
 	void ballance(node n) {

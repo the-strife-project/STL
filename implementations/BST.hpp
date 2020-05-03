@@ -3,8 +3,9 @@
 
 #include <kernel/klibc/STL/bintree>
 #include <kernel/klibc/STL/pair>
+#include <kernel/klibc/STL/order>
 
-template<typename T, typename _node=_regular_bintree_node<T>> class BST {
+template<typename T, typename _node=_regular_bintree_node<T>, typename Compare=less<T>> class BST {
 protected:
 	typedef _node node;
 
@@ -25,7 +26,7 @@ protected:
 		while(!n.null()) {
 			if(e == *n) {
 				return pair<bool, node>(true, n);
-			} else if(e < *n) {
+			} else if(Compare()(e, *n)) {
 				parent = n;
 				n = n.left();
 			} else {
@@ -53,7 +54,7 @@ protected:
 			if(found.f)
 				return node();
 
-			if(e < *(found.s)) {
+			if(Compare()(e, *(found.s))) {
 				data.insert_left(found.s, e);
 				ret = found.s.left();
 			} else {

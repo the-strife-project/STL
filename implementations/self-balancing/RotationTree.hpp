@@ -3,7 +3,7 @@
 
 #include <kernel/klibc/STL/BST>
 
-template<typename T, typename _node=_regular_bintree_node<T>> class RotationTree : public BST<T, _node> {
+template<typename T, typename _node=_regular_bintree_node<T>, typename Compare=less<T>> class RotationTree : public BST<T, _node, Compare> {
 private:
 	typedef _node node;
 

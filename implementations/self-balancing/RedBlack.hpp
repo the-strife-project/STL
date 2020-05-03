@@ -4,8 +4,8 @@
 #include <kernel/klibc/STL/implementations/self-balancing/RedBlack_node.hpp>
 #include <kernel/klibc/STL/implementations/self-balancing/RotationTree.hpp>
 
-template<typename T> class RedBlack : public RotationTree<T, _RedBlack_node<T>> {
-private:
+template<typename T, typename Compare=less<T>> class RedBlack : public RotationTree<T, _RedBlack_node<T>, Compare> {
+protected:
 	typedef _RedBlack_node<T> node;
 
 	const static bool BLACK = false;
