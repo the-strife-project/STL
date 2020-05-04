@@ -98,8 +98,7 @@ protected:
 
 
 	void _erase(node n) override {
-		// At this point, n is black.
-		// Now, cases depend on the number of children of n, much like in BST deletion.
+		// Cases depend on the number of children of n, much like in BST deletion.
 		if(n.left().null() && n.right().null()) {
 			// Leaf.
 			if(n.red()) {
