@@ -6,7 +6,7 @@
 #define VECTOR_INITIAL_SIZE 1
 
 template<typename T> class vector {
-private:
+protected:
 	T* data;
 	size_t sz;
 	size_t allocated;
