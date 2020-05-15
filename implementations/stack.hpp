@@ -13,6 +13,10 @@ public:
 		return data.size();
 	}
 
+	inline bool empty() const {
+		return data.size() == 0;
+	}
+
 	inline void push(T e) {
 		data.push_front(e);
 	}

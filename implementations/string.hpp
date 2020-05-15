@@ -25,9 +25,17 @@ public:
 	}
 
 	string& operator=(const char* other) {
+		vector<char>::clear();
+
 		for(size_t i=0; other[i]; ++i)
 			vector<char>::push_back(other[i]);
 		return *this;
+	}
+
+	inline string operator+(const string& other) const {
+		string ret(*this);
+		ret += other;
+		return ret;
 	}
 
 	inline string& operator+=(const string& other) {
@@ -79,6 +87,22 @@ public:
 			if((*this)[i] < other[i])
 				return true;
 			else if((*this)[i] > other[i])
+				return false;
+		}
+
+		return false;
+	}
+
+	bool operator>(const string& other) const {
+		if(vector<char>::size() > other.size())
+			return true;
+		else if(vector<char>::size() < other.size())
+			return false;
+
+		for(size_t i=0; i<vector<char>::size(); ++i) {
+			if((*this)[i] > other[i])
+				return true;
+			else if((*this)[i] < other[i])
 				return false;
 		}
 

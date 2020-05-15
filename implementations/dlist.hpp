@@ -37,6 +37,10 @@ public:
 		return sz;
 	}
 
+	inline bool empty() const {
+		return sz == 0;
+	}
+
 	void clear() {
 		node* current = first;
 		while(current) {

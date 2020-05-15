@@ -12,7 +12,7 @@ protected:
 	const static bool RED = true;
 
 	node _insert(const T& e) override {
-		node n = RotationTree<T, node>::_insert(e);
+		node n = RotationTree<T, node, Compare>::_insert(e);
 		if(n.null()) {
 			// Already inserted!
 			return n;
@@ -48,29 +48,29 @@ protected:
 				if(p.left() == x && gp.left() == p) {
 					// Straight line at the left.
 					// Right rotation on grandparent.
-					RotationTree<T, node>::right_rotation(gp);
+					RotationTree<T, node, Compare>::right_rotation(gp);
 					p.invertColor();
 					gp.invertColor();
 				} else if(p.right() == x && gp.right() == p) {
 					// Straight line at the right.
 					// Left rotation on grandparent.
-					RotationTree<T, node>::left_rotation(gp);
+					RotationTree<T, node, Compare>::left_rotation(gp);
 					p.invertColor();
 					gp.invertColor();
 				} else if(p.left() == x && gp.right() == p) {
 					// Triangle pointing to the right.
 					// Right-left rotation.
-					RotationTree<T, node>::right_rotation(p);
+					RotationTree<T, node, Compare>::right_rotation(p);
 					x.invertColor();
 					x.parent().invertColor();
-					RotationTree<T, node>::left_rotation(gp);
+					RotationTree<T, node, Compare>::left_rotation(gp);
 				} else {
 					// Triangle pointing to the left.
 					// Left-right rotation.
-					RotationTree<T, node>::left_rotation(p);
+					RotationTree<T, node, Compare>::left_rotation(p);
 					x.invertColor();
 					x.parent().invertColor();
-					RotationTree<T, node>::right_rotation(gp);
+					RotationTree<T, node, Compare>::right_rotation(gp);
 				}
 
 				// We've finished.
@@ -110,7 +110,7 @@ protected:
 				// If deleting the root when it's on its own, this case will be called.
 				// Fix, then delete.
 				fixDoubleBlack(n);
-				BST<T, node>::_erase(n);
+				BST<T, node, Compare>::_erase(n);
 			}
 		} else if(n.left().null() || n.right().null()) {
 			// One child.
@@ -121,12 +121,12 @@ protected:
 				else
 					n.right().color(BLACK);
 
-				BST<T, node>::_erase(n);
+				BST<T, node, Compare>::_erase(n);
 			} else {
 				// Not the root.
 				node child = !n.left().null() ? n.left() : n.right();
 				bool eitherred = n.red() || child.red();
-				BST<T, node>::_erase(n);
+				BST<T, node, Compare>::_erase(n);
 				if(eitherred) {
 					// Color child black.
 					child.color(BLACK);
@@ -142,7 +142,7 @@ protected:
 			while(!next.left().null())
 				next = next.left();
 			// Swap.
-			BST<T, node>::_swap(n, next);
+			BST<T, node, Compare>::_swap(n, next);
 			// Leave the colors unchanged.
 			bool color_aux = n.color();
 			n.color(next.color());
@@ -177,22 +177,22 @@ protected:
 						if(s.parent().left() == s) {
 							redchild.color(s.color());
 							s.color(n.parent().color());
-							RotationTree<T, node>::right_rotation(n.parent());
+							RotationTree<T, node, Compare>::right_rotation(n.parent());
 						} else {
 							redchild.color(n.parent().color());
-							RotationTree<T, node>::right_rotation(s);
-							RotationTree<T, node>::left_rotation(n.parent());
+							RotationTree<T, node, Compare>::right_rotation(s);
+							RotationTree<T, node, Compare>::left_rotation(n.parent());
 						}
 					} else {
 						// redchild is the right child of s.
 						if(s.parent().left() == s) {
 							redchild.color(n.parent().color());
-							RotationTree<T, node>::left_rotation(s);
-							RotationTree<T, node>::right_rotation(n.parent());
+							RotationTree<T, node, Compare>::left_rotation(s);
+							RotationTree<T, node, Compare>::right_rotation(n.parent());
 						} else {
 							redchild.color(s.color());
 							s.color(n.parent().color());
-							RotationTree<T, node>::left_rotation(n.parent());
+							RotationTree<T, node, Compare>::left_rotation(n.parent());
 						}
 					}
 
@@ -214,10 +214,10 @@ protected:
 				s.color(BLACK);
 				if(s.parent().left() == s) {
 					// Sibling is at the left.
-					RotationTree<T, node>::right_rotation(n.parent());
+					RotationTree<T, node, Compare>::right_rotation(n.parent());
  				} else {
 					// Sibling is at the right.
-					RotationTree<T, node>::left_rotation(n.parent());
+					RotationTree<T, node, Compare>::left_rotation(n.parent());
 				}
 			}
 		}

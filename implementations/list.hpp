@@ -42,6 +42,10 @@ public:
 		return sz;
 	}
 
+	inline bool empty() const {
+		return sz == 0;
+	}
+
 	// Back.
 	void push_back(T e) {
 		node* newnode = new node;
