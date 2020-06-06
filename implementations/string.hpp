@@ -16,6 +16,13 @@ public:
 		return vector<char>::size();
 	}
 
+	bool isNatural() const {
+		for(auto x : *this)
+			if(x < '0' || x > '9')
+				return false;
+		return true;
+	}
+
 	inline void append(const string& other) {
 		*this += other;
 	}
