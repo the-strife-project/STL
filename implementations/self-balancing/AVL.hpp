@@ -1,13 +1,11 @@
 #ifndef AVL_HPP
 #define AVL_HPP
 
-#include <kernel/klibc/STL/implementations/self-balancing/AVL_node.hpp>
-#include <kernel/klibc/STL/implementations/self-balancing/RotationTree.hpp>
+#include <implementations/self-balancing/AVL_node.hpp>
+#include <implementations/self-balancing/RotationTree.hpp>
 
-int abs(int a) {
-	if(a < 0)
-		a = -a;
-	return a;
+inline int abs(int a) {
+	return (a < 0) ? -a : a;
 }
 
 template<typename T, typename Compare=less<T>> class AVL : public RotationTree<T, _AVL_node<T>, Compare> {
@@ -35,13 +33,13 @@ protected:
 					// If the issue is at the right, we must first rotate that.
 					if(left_height < right_height) {
 						// Left right rotation.
-						RotationTree<T, node>::left_rotation(n.left());
+						RotationTree<T, node, Compare>::left_rotation(n.left());
 						n.left().recomputeHeight();
 						n.left().left().recomputeHeight();
 					}
 
 					// Right rotation on n.
-					RotationTree<T, node>::right_rotation(n);
+					RotationTree<T, node, Compare>::right_rotation(n);
 				} else {
 					// At the right child's.
 					aux = n.right().recomputeHeight();
@@ -50,13 +48,13 @@ protected:
 
 					if(left_height > right_height) {
 						// Right left rotation.
-						RotationTree<T, node>::right_rotation(n.right());
+						RotationTree<T, node, Compare>::right_rotation(n.right());
 						n.right().recomputeHeight();
 						n.right().right().recomputeHeight();
 					}
 
 					// Left rotation on n.
-					RotationTree<T, node>::left_rotation(n);
+					RotationTree<T, node, Compare>::left_rotation(n);
 				}
 
 				// Recompute heights of n and its parent.
@@ -70,14 +68,14 @@ protected:
 	}
 
 	inline node _insert(const T& e) override {
-		node inserted = BST<T, node>::_insert(e);
+		node inserted = BST<T, node, Compare>::_insert(e);
 		ballance(inserted.parent());
 		return inserted;
 	}
 
 	inline void _erase(node n) override {
 		node parent = n.parent();
-		BST<T, node>::_erase(n);
+		BST<T, node, Compare>::_erase(n);
 		ballance(parent);
 	}
 };

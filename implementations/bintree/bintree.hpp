@@ -2,10 +2,10 @@
 #define BINTREE_H
 
 #include <common/types.hpp>
-#include <kernel/klibc/STL/implementations/bintree/regular_node.hpp>
+#include <implementations/bintree/regular_node.hpp>
 
 // Required for the level_iterator.
-#include <kernel/klibc/STL/queue>
+#include <queue>
 
 /*
 	Regular bintree node.
@@ -212,7 +212,7 @@ public:
 	}
 
 	// Iterators.
-	#include <kernel/klibc/STL/implementations/bintree/iterators.hpp>
+	#include <implementations/bintree/iterators.hpp>
 };
 
 #endif

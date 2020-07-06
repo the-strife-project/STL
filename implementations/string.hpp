@@ -1,8 +1,8 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 
-#include <kernel/klibc/STL/vector>
-#include <kernel/klibc/STL/list>
+#include <vector>
+#include <list>
 
 class string : public vector<char> {
 public:
@@ -21,6 +21,13 @@ public:
 			if(x < '0' || x > '9')
 				return false;
 		return true;
+	}
+
+	inline const char* c_str() {
+		// Here's the idea: push and pop. The zero will be left there. Pop never frees.
+		*this += 0;
+		this->pop_back();
+		return this->data;
 	}
 
 	inline void append(const string& other) {

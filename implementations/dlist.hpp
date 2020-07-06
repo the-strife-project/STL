@@ -1,3 +1,6 @@
+#ifndef DLIST_HPP
+#define DLIST_HPP
+
 #include <common/types.hpp>
 
 /*
@@ -111,7 +114,8 @@ public:
 	}
 
 	// Operators.
-	dlist<T>& operator=(const dlist<T>& other) {
+	// CAREFUL WHEN NEEDED: THIS IS WRONG!
+	/*dlist<T>& operator=(const dlist<T>& other) {
 		if(this != &other) {
 			node* current_other = other.first;
 			node* current_this = nullptr;
@@ -125,13 +129,14 @@ public:
 					first = current_this;
 				current_other = current_other->next;
 			}
+
 			last = current_this;
 			last->next = nullptr;
 			sz = other.sz;
 		}
 
 		return *this;
-	}
+	}*/
 
 	dlist<T>& operator=(dlist<T>&& other) {
 		if(this != &other) {
@@ -330,3 +335,5 @@ public:
 		}
 	}
 };
+
+#endif

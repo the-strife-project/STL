@@ -10,15 +10,15 @@ template<typename T, typename Q> struct pair {
 		: f(t), s(q)
 	{}
 
-	bool operator<(const pair& other) const {
+	inline bool operator<(const pair& other) const {
 		return (f < other.f);
 	}
 
-	bool operator>(const pair& other) const {
+	inline bool operator>(const pair& other) const {
 		return (f > other.f);
 	}
 
-	bool operator==(const pair& other) const {
+	inline bool operator==(const pair& other) const {
 		return (f == other.f);
 	}
 };

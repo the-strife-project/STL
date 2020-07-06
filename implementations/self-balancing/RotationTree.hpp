@@ -1,7 +1,7 @@
 #ifndef ROTATIONTREE_HPP
 #define ROTATIONTREE_HPP
 
-#include <kernel/klibc/STL/BST>
+#include <BST>
 
 template<typename T, typename _node=_regular_bintree_node<T>, typename Compare=less<T>> class RotationTree : public BST<T, _node, Compare> {
 private:

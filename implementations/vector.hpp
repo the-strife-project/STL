@@ -77,9 +77,10 @@ public:
 	}
 
 	// Back.
-	inline void push_back(T e) {
+	void push_back(const T& e) {
 		data[sz++] = e;
-		if(sz == allocated) more();
+		if(sz == allocated)
+			more();
 	}
 
 	void push_back(const vector<T>& other) {

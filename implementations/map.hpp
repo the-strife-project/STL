@@ -1,14 +1,14 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <kernel/klibc/STL/pair>
-#include <kernel/klibc/STL/RedBlack>
+#include <pair>
+#include <AVL>
 
-template<typename T, typename Q, typename Compare=less<pair<T, Q>>> class map : public RedBlack<pair<T, Q>, Compare> {
+template<typename T, typename Q, typename Compare=less<pair<T, Q>>> class map : public AVL<pair<T, Q>, Compare> {
 private:
-	typedef RedBlack<pair<T, Q>, Compare> inh;
+	typedef AVL<pair<T, Q>, Compare> inh;
 public:
-	using inh::RedBlack;
+	using inh::AVL;
 
 	inline Q& operator[](const T& t) {
 		auto x = inh::_find(pair<T, Q>(t, Q()));

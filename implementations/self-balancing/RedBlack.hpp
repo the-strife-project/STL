@@ -1,8 +1,19 @@
 #ifndef REDBLACK_HPP
 #define REDBLACK_HPP
 
-#include <kernel/klibc/STL/implementations/self-balancing/RedBlack_node.hpp>
-#include <kernel/klibc/STL/implementations/self-balancing/RotationTree.hpp>
+#include <implementations/self-balancing/RedBlack_node.hpp>
+#include <implementations/self-balancing/RotationTree.hpp>
+#include <kernel/klibc/stdio>
+
+/*
+	THIS DOESN'T WORK AND I HAVE ABSOLUTELY NO IDEA WHY
+
+	"RED ROOT WTF" gets printed, even though
+	"???" doesn't. I'm assuming it's not a problem
+	with the RedBlack itself, but it's related to something else.
+
+	By now, "set" and "map" rely on AVL, which works.
+*/
 
 template<typename T, typename Compare=less<T>> class RedBlack : public RotationTree<T, _RedBlack_node<T>, Compare> {
 protected:
@@ -12,214 +23,190 @@ protected:
 	const static bool RED = true;
 
 	node _insert(const T& e) override {
+		printf("[RBI, %d]", e);
+		// Podría dumpear aquí el árbol.
+
 		node n = RotationTree<T, node, Compare>::_insert(e);
-		if(n.null()) {
-			// Already inserted!
-			return n;
-		}
-
-		// Case 1: root? Color it black.
-		if(n.parent().null()) {
-			n.color(BLACK);
-			return n;
-		}
-
-		// Case 2: not root. Leave it red.
-		// (a) If its parent is black, we're done.
-		if(n.parent().black())
-			return n;
-
-		// (b) Parent is red. This violates the «no red-red relationship» invariant. Let's fix it.
 		node x = n;
-		while(true) {
-			// As this block is called several times, first we must make sure that
-			// both the grandparent exists.
-			node p = x.parent();
-			if(p.null())
-				break;
 
-			node gp = p.parent();
-			if(gp.null())
-				break;
+		// Already inserted?
+		if(n.null())
+			return n;
 
-			if(x.uncle().null() || x.uncle().black()) {
-				// Uncle is black or absent.
-				// Rotate.
-				if(p.left() == x && gp.left() == p) {
-					// Straight line at the left.
-					// Right rotation on grandparent.
-					RotationTree<T, node, Compare>::right_rotation(gp);
-					p.invertColor();
-					gp.invertColor();
-				} else if(p.right() == x && gp.right() == p) {
-					// Straight line at the right.
-					// Left rotation on grandparent.
-					RotationTree<T, node, Compare>::left_rotation(gp);
-					p.invertColor();
-					gp.invertColor();
-				} else if(p.left() == x && gp.right() == p) {
-					// Triangle pointing to the right.
-					// Right-left rotation.
-					RotationTree<T, node, Compare>::right_rotation(p);
-					x.invertColor();
-					x.parent().invertColor();
-					RotationTree<T, node, Compare>::left_rotation(gp);
-				} else {
-					// Triangle pointing to the left.
-					// Left-right rotation.
-					RotationTree<T, node, Compare>::left_rotation(p);
-					x.invertColor();
-					x.parent().invertColor();
-					RotationTree<T, node, Compare>::right_rotation(gp);
-				}
+		if(x.parent().null())
+			x.color(BLACK);
 
-				// We've finished.
-				break;
+		if(this->data.root().red()) {
+			printf("RED ROOT WTF\n");
+			while(true);
+		}
+
+		while(x.parent().red()) {
+			node u = x.uncle();
+			if(u.red()) {
+				x.parent().color(BLACK);
+				u.color(BLACK);
+				x = x.parent().parent();
+				if(!x.parent().null())
+					x.color(RED);
 			} else {
-				// Uncle is red. We must check everything up to the root.
-				// First, parent and uncle turn black.
-				p.color(BLACK);
-				x.uncle().color(BLACK);
-				// If grandparent is not the root, change its color to red.
-				if(!gp.parent().null()) {
-					gp.color(RED);
-				} else {
-					// Grandparent is the root. Leave it black. We're done.
-					break;
+				// Triangle cases. Will fall back to the others.
+				if(x == x.parent().right() && x.parent() == x.parent().parent().left()) {
+					// Triangle pointing left.
+					RotationTree<T, node, Compare>::left_rotation(x.parent());
+					x = x.left();
+				} else if(x == x.parent().left() && x.parent() == x.parent().parent().right()) {
+					// Triangle pointing right.
+					RotationTree<T, node, Compare>::right_rotation(x.parent());
+					x = x.right();
 				}
 
-				x = gp;
-				// Repeat!
+				// Straight line cases.
+				if(x == x.parent().left() && x.parent() == x.parent().parent().left()) {
+					// Left straight.
+					auto aux = x.parent().color();
+					x.parent().color(x.parent().parent().color());
+					x.parent().parent().color(aux);
+					RotationTree<T, node, Compare>::right_rotation(x.parent().parent());
+				} else if(x == x.parent().right() && x.parent() == x.parent().parent().right()) {
+					auto aux = x.parent().color();
+					x.parent().color(x.parent().parent().color());
+					x.parent().parent().color(aux);
+					RotationTree<T, node, Compare>::left_rotation(x.parent().parent());
+				}
+
+				break;
 			}
+		}
+
+		if(this->data.root().red()) {
+			printf("???");
+			while(true);
 		}
 
 		return n;
 	}
 
-
 	void _erase(node n) override {
-		// Cases depend on the number of children of n, much like in BST deletion.
+		printf("[RBD, %d]", *n);while(true);
+		if(this->data.root().red()) {
+			printf("what %d.\n", *(this->data.root()));
+			while(true);
+		}
+
 		if(n.left().null() && n.right().null()) {
+			printf("A\n");
 			// Leaf.
 			if(n.red()) {
-				// Red leaf.
-				if(!n.sibling().null())
-					n.sibling().color(RED);
+				if(this->size() == 1) printf("fuck\n");
 			} else {
-				// Black leaf.
-				// If deleting the root when it's on its own, this case will be called.
-				// Fix, then delete.
+				// n would be left after erasion as a double black.
 				fixDoubleBlack(n);
-				BST<T, node, Compare>::_erase(n);
 			}
-		} else if(n.left().null() || n.right().null()) {
-			// One child.
-			if(n.parent().null()) {
-				// Root. Just delete it and make the next one black.
-				if(!n.left().null())
-					n.left().color(BLACK);
-				else
-					n.right().color(BLACK);
 
-				BST<T, node, Compare>::_erase(n);
+			BST<T, node, Compare>::_erase(n);
+		} else if(n.left().null() || n.right().null()){
+			// One child.
+			printf("it's going to shit itself\n");
+			node child = !n.left().null() ? n.left() : n.right();
+			if(n.parent().null()) {
+				// Root.
+				child.color(BLACK);
 			} else {
-				// Not the root.
-				node child = !n.left().null() ? n.left() : n.right();
-				bool eitherred = n.red() || child.red();
-				BST<T, node, Compare>::_erase(n);
-				if(eitherred) {
-					// Color child black.
+				if(n.red() || child.red()) {
 					child.color(BLACK);
 				} else {
-					// Both are black. Double black situation.
-					fixDoubleBlack(child);
+					// n would be left as a double black.
+					fixDoubleBlack(n);
 				}
 			}
-		} else {
+
+			BST<T, node, Compare>::_erase(n);
+		} else if(!n.left().null() && !n.right().null()) {
+			printf("C\n");
 			// Two children.
-			// Get successor.
-			node next = n.right();
-			while(!next.left().null())
-				next = next.left();
-			// Swap.
-			BST<T, node, Compare>::_swap(n, next);
-			// Leave the colors unchanged.
-			bool color_aux = n.color();
-			n.color(next.color());
-			next.color(color_aux);
-			// Recurse and delete.
+			node succ = n.right();
+			while(!succ.left().null())
+				succ = succ.left();
+
+			// Actual swap (not just the values) so iterators are not invalidated.
+			BST<T, node, Compare>::_swap(n, succ);
+
+			auto aux = n.color();
+			n.color(succ.color());
+			succ.color(aux);
 			_erase(n);
+		}
+
+		if(this->data.root().red()) {
+			printf("WTF!!!!\n");
+			while(true);
 		}
 	}
 
+	/*
+		I would like to take a moment to give thanks to the following video:
+		https://www.youtube.com/watch?v=CTvfzU_uNKE
+	*/
 	void fixDoubleBlack(node n) {
-		// While u is double black (break when necessary) and it's not the root...
-		while(!n.parent().null()) {
+		printf("fixDoubleBlack.\n");
+		if(this->data.root().red()) {
+			printf("???...");
+			while(true);
+		}
+
+		while(true) {
+			// Root?
+			if(n.parent().null()) {
+				n.color(BLACK);
+				break;	// Terminal case.
+			}
+
 			node s = n.sibling();
 
-			if(s.null()) {
-				// No sibling, double black pushed up.
-				n = n.parent();
-				continue;
-			}
-
-			if(s.black()) {
-				// Sibling is black.
-				// What about its children?
-				if(s.left().red() || s.right().red()) {
-					// At least one of the children is red.
-					// Time to do some rotations.
-					bool redchildpos = !s.left().red();	// False: left. True: right.
-					node redchild = !redchildpos ? s.left() : s.right();
-
-					if(!redchildpos) {
-						// redchild is the left child of s.
-						if(s.parent().left() == s) {
-							redchild.color(s.color());
-							s.color(n.parent().color());
-							RotationTree<T, node, Compare>::right_rotation(n.parent());
-						} else {
-							redchild.color(n.parent().color());
-							RotationTree<T, node, Compare>::right_rotation(s);
-							RotationTree<T, node, Compare>::left_rotation(n.parent());
-						}
-					} else {
-						// redchild is the right child of s.
-						if(s.parent().left() == s) {
-							redchild.color(n.parent().color());
-							RotationTree<T, node, Compare>::left_rotation(s);
-							RotationTree<T, node, Compare>::right_rotation(n.parent());
-						} else {
-							redchild.color(s.color());
-							s.color(n.parent().color());
-							RotationTree<T, node, Compare>::left_rotation(n.parent());
-						}
-					}
-
-					n.parent().color(BLACK);
-					break;
-				} else {
-					// Both of the children of the sibling are black.
-					s.color(RED);
-					if(n.parent().red()) {
-						n.parent().color(BLACK);
-						break;
-					}
-					// If the parent is black, push up double blackness.
-					n = n.parent();
-				}
-			} else {
-				// Sibling is red.
+			// Red sibling?
+			if(s.red()) {
 				n.parent().color(RED);
 				s.color(BLACK);
-				if(s.parent().left() == s) {
-					// Sibling is at the left.
+				if(s.parent().left() == s)
 					RotationTree<T, node, Compare>::right_rotation(n.parent());
- 				} else {
-					// Sibling is at the right.
+				else
 					RotationTree<T, node, Compare>::left_rotation(n.parent());
+			} else {
+				// Black sibling. Children?
+				if(s.left().black() && s.right().black()) {
+					// Two black children. Parent?
+					if(n.parent().black()) {
+						// Black parent.
+						s.color(RED);
+						n = n.parent();	// Pushed the problem upwards.
+					} else {
+						// Red parent.
+						s.color(RED);
+						s.parent().color(BLACK);
+						break;	// Terminal case.
+					}
+				} else {
+					// Is the right child of sibling black?
+					if(s.right().black()) {
+						s.color(RED);
+						s.left().color(RED);
+						RotationTree<T, node, Compare>::right_rotation(s);
+					} else {
+						// Right child is red.
+						s.right().color(BLACK);
+						s.color(n.parent().color());
+						n.parent().color(BLACK);
+						RotationTree<T, node, Compare>::left_rotation(s);
+						break;	// Terminal case.
+					}
 				}
 			}
+		}
+
+		if(this->data.root().red()) {
+			printf("I don't get it...");
+			while(true);
 		}
 	}
 };

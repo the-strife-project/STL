@@ -1,9 +1,9 @@
 #ifndef BST_HPP
 #define BST_HPP
 
-#include <kernel/klibc/STL/bintree>
-#include <kernel/klibc/STL/pair>
-#include <kernel/klibc/STL/order>
+#include <bintree>
+#include <pair>
+#include <order>
 
 template<typename T, typename _node=_regular_bintree_node<T>, typename Compare=less<T>> class BST {
 protected:

@@ -2,7 +2,6 @@
 #define LIST_H
 
 #include <common/types.hpp>
-#include <stdarg.h>
 
 template<typename T> class list {
 private:
@@ -22,7 +21,11 @@ public:
 		*this = other;
 	}
 
-	list(list&& other) : first(other.first), last(other.last), sz(other.sz) {
+	list(list&& other) {
+		first = other.first;
+		last = other.last;
+		sz = other.sz;
+
 		other.first = other.last = nullptr;
 		other.sz = 0;
 	}
@@ -102,15 +105,25 @@ public:
 				node* old_this = current_this;
 				current_this = new node;
 				current_this->data = current_other->data;
+
 				if(old_this)
 					old_this->next = current_this;
 				else
 					first = current_this;
+
 				current_other = current_other->next;
 			}
-			last = current_this;
-			last->next = nullptr;
-			sz = other.sz;
+
+			if(!current_this) {
+				// List is empty.
+				first = last = nullptr;
+				sz = 0;
+			} else {
+				// first is already set.
+				last = current_this;
+				last->next = nullptr;
+				sz = other.sz;
+			}
 		}
 
 		return *this;

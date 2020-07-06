@@ -1,6 +1,9 @@
 #ifndef AVLNODE_HPP
 #define AVLNODE_HPP
 
+#include <common/types.hpp>
+#include <pair>
+
 /*
 	This defines a node for an AVL tree.
 	The only difference with _regular_bintree_node is that

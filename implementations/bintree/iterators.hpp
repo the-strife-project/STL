@@ -25,7 +25,7 @@ public:
 
 	_template_iterator(const _template_iterator& other) = default;
 
-	node getNode() const {
+	inline node getNode() const {
 		return cur;
 	}
 
@@ -275,13 +275,13 @@ class _template_level_iterator {
 protected:
 	queue<node> q;
 
-	_template_level_iterator(node n) {
-		q.push(n);
-	}
-
 public:
 	_template_level_iterator() = default;
 	_template_level_iterator(const _template_level_iterator& other) = default;
+
+	_template_level_iterator(node n) {
+		q.push(n);
+	}
 
 	inline bool operator!=(const _template_level_iterator& other) const {
 		// I am NOT sure if this works in all cases.
@@ -322,6 +322,10 @@ public:
 		_template_level_iterator ret = *this;
 		++(*this);
 		return ret;
+	}
+
+	inline node getNode() const {
+		return q.front();
 	}
 };
 

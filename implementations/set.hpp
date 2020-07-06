@@ -1,11 +1,11 @@
 #ifndef SET_HPP
 #define SET_HPP
 
-#include <kernel/klibc/STL/RedBlack>
+#include <AVL>
 
-template<typename T, typename Compare=less<T>> class set : public RedBlack<T, Compare> {
+template<typename T, typename Compare=less<T>> class set : public AVL<T, Compare> {
 public:
-	using RedBlack<T, Compare>::RedBlack;
+	using AVL<T, Compare>::AVL;
 };
 
 #endif
