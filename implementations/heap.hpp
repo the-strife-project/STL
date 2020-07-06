@@ -4,9 +4,6 @@
 #include <bintree>
 #include <order>
 
-#include <kernel/klibc/stdio>
-#include <kernel/asm.hpp>
-
 template<typename T, typename Compare=less<T>> class Heap {
 private:
 	bintree<T> data;

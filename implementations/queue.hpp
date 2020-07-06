@@ -1,7 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include <common/types.hpp>
+#include <types.hpp>
 #include <list>
 
 template<typename T> class queue {

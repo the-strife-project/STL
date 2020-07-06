@@ -1,7 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include <common/types.hpp>
+#include <types.hpp>
 #include <list>
 
 template<typename T> class stack {

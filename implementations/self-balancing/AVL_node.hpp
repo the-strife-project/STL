@@ -1,7 +1,7 @@
 #ifndef AVLNODE_HPP
 #define AVLNODE_HPP
 
-#include <common/types.hpp>
+#include <types.hpp>
 #include <pair>
 
 /*

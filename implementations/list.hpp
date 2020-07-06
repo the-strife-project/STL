@@ -1,7 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <common/types.hpp>
+#include <types.hpp>
 
 template<typename T> class list {
 private:
