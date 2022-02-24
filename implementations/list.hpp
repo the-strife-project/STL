@@ -1,7 +1,7 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef _STDLIB_LIST_H
+#define _STDLIB_LIST_H
 
-#include <types.hpp>
+#include <types>
 
 template<typename T> class list {
 private:

@@ -1,5 +1,5 @@
-#ifndef ORDER_HPP
-#define ORDER_HPP
+#ifndef _STDLIB_ORDER_HPP
+#define _STDLIB_ORDER_HPP
 
 template<typename T> struct less {
 	bool operator()(const T& a, const T& b) const {

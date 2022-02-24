@@ -1,8 +1,11 @@
-#ifndef HEAP_HPP
-#define HEAP_HPP
+#ifndef _STDLIB_HEAP_HPP
+#define _STDLIB_HEAP_HPP
 
 #include <bintree>
 #include <order>
+
+// This implementation SUCKS. Most heaps are implemented with vectors
+//   so the cache doesn't get absolutely destroyed. TODO.
 
 template<typename T, typename Compare=less<T>> class Heap {
 private:

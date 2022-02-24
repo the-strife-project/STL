@@ -1,2 +1,1 @@
-#include <implementations/vector.hpp>
-#include <implementations/AllocationVector.hpp>
+implementations/vector.hpp

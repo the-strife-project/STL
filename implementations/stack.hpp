@@ -1,7 +1,7 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef _STDLIB_STACK_H
+#define _STDLIB_STACK_H
 
-#include <types.hpp>
+#include <types>
 #include <list>
 
 template<typename T> class stack {

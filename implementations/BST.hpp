@@ -1,5 +1,5 @@
-#ifndef BST_HPP
-#define BST_HPP
+#ifndef _STDLIB_BST_HPP
+#define _STDLIB_BST_HPP
 
 #include <bintree>
 #include <pair>

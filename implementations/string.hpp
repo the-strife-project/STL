@@ -1,5 +1,5 @@
-#ifndef STRING_HPP
-#define STRING_HPP
+#ifndef _STDLIB_STRING_HPP
+#define _STDLIB_STRING_HPP
 
 #include <vector>
 #include <list>

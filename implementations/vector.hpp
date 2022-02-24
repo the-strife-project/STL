@@ -1,7 +1,7 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef _STDLIB_VECTOR_H
+#define _STDLIB_VECTOR_H
 
-#include <types.hpp>
+#include <types>
 
 #define VECTOR_INITIAL_SIZE 1
 

@@ -1,5 +1,5 @@
-#ifndef REDBLACK_HPP
-#define REDBLACK_HPP
+#ifndef _STDLIB_REDBLACK_HPP
+#define _STDLIB_REDBLACK_HPP
 
 #include <implementations/self-balancing/RedBlack_node.hpp>
 #include <implementations/self-balancing/RotationTree.hpp>

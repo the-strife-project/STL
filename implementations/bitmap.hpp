@@ -1,5 +1,5 @@
-#ifndef BITMAP_H
-#define BITMAP_H
+#ifndef _STDLIB_BITMAP_H
+#define _STDLIB_BITMAP_H
 
 class bitmap {
 private:

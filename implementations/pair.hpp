@@ -1,5 +1,5 @@
-#ifndef PAIR_H
-#define PAIR_H
+#ifndef _STDLIB_PAIR_H
+#define _STDLIB_PAIR_H
 
 template<typename T, typename Q> struct pair {
 	T f;

@@ -1,7 +1,7 @@
-#ifndef BINTREE_H
-#define BINTREE_H
+#ifndef _STDLIB_BINTREE_H
+#define _STDLIB_BINTREE_H
 
-#include <types.hpp>
+#include <types>
 #include <implementations/bintree/regular_node.hpp>
 
 // Required for the level_iterator.

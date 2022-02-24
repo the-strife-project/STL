@@ -1,5 +1,7 @@
-#ifndef SET_HPP
-#define SET_HPP
+#ifndef _STDLIB_SET_HPP
+#define _STDLIB_SET_HPP
+
+// Yes. This should be a RedBlack. But iirc implementation had faults. TODO.
 
 #include <AVL>
 

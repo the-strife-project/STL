@@ -1,5 +1,5 @@
-#ifndef REDBLACKNODE_HPP
-#define REDBLACKNODE_HPP
+#ifndef _STDLIB_REDBLACKNODE_HPP
+#define _STDLIB_REDBLACKNODE_HPP
 
 /*
 	This defines a node for a Red-Black tree.

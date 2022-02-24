@@ -1,5 +1,5 @@
-#ifndef BINTREE_REGULAR_NODE
-#define BINTREE_REGULAR_NODE
+#ifndef _STDLIB_BINTREE_REGULAR_NODE
+#define _STDLIB_BINTREE_REGULAR_NODE
 
 /*
 	This defines a regular bintree node.

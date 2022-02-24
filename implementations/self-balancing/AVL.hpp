@@ -1,5 +1,5 @@
-#ifndef AVL_HPP
-#define AVL_HPP
+#ifndef _STDLIB_AVL_HPP
+#define _STDLIB_AVL_HPP
 
 #include <implementations/self-balancing/AVL_node.hpp>
 #include <implementations/self-balancing/RotationTree.hpp>

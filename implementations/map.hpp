@@ -1,5 +1,5 @@
-#ifndef MAP_HPP
-#define MAP_HPP
+#ifndef _STDLIB_MAP_HPP
+#define _STDLIB_MAP_HPP
 
 #include <pair>
 #include <AVL>
