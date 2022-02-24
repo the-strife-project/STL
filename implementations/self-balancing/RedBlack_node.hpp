@@ -43,33 +43,13 @@ namespace std {
 			: data(other.data)
 		{}
 
-		inline bool null() const {
-			return (data == nullptr);
-		}
-
-		inline node parent() const {
-			return data->parent;
-		}
-
-		inline void parent(node n) {
-			data->parent = n;
-		}
-
-		inline node left() const {
-			return data->left;
-		}
-
-		inline void left(node n) {
-			data->left = n;
-		}
-
-		inline node right() const {
-			return data->right;
-		}
-
-		inline void right(node n) {
-			data->right = n;
-		}
+		inline bool null() const { return data == nullptr; }
+		inline node parent() const { return data->parent; }
+		inline void parent(node n) { data->parent = n; }
+		inline node left() const { return data->left; }
+		inline void left(node n) { data->left = n; }
+		inline node right() const { return data->right; }
+		inline void right(node n) { data->right = n; }
 
 		/* --- Red-Black specifics --- */
 		inline node uncle() const {
@@ -94,22 +74,12 @@ namespace std {
 				return data->color;
 		}
 
-		inline void color(bool x) {
-			data->color = x;
-		}
-
-		inline void invertColor() {
-			data->color = !(data->color);
-		}
+		inline void color(bool x) { data->color = x; }
+		inline void invertColor() { data->color = !(data->color); }
 
 		// Neat shortcuts. Call color() in order to keep the null node protections.
-		inline bool black() const {
-			return !color();
-		}
-
-		inline bool red() const {
-			return color();
-		}
+		inline bool black() const { return !color(); }
+		inline bool red() const { return color(); }
 		/* --- End Red-Black specifics --- */
 
 		inline void destroy() {
@@ -117,13 +87,8 @@ namespace std {
 			data = nullptr;
 		}
 
-		inline T& operator*() {
-			return data->tag;
-		}
-
-		inline const T& operator*() const {
-			return data->tag;
-		}
+		inline T& operator*() { return data->tag; }
+		inline const T& operator*() const { return data->tag; }
 
 		inline node& operator=(const node& other) {
 			data = other.data;
@@ -131,11 +96,11 @@ namespace std {
 		}
 
 		inline bool operator==(const node& other) const {
-			return (data == other.data);
+			return data == other.data;
 		}
 
 		inline bool operator!=(const node& other) const {
-			return (data != other.data);
+			return data != other.data;
 		}
 	};
 }

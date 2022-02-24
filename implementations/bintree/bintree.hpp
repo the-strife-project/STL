@@ -96,21 +96,10 @@ namespace std {
 		}
 
 		// Methods.
-		inline node root() const {
-			return _root;
-		}
-
-		inline void root(node n) {
-			_root = n;
-		}
-
-		inline size_t size() const {
-			return count(_root);
-		}
-
-		inline bool empty() const {
-			return (_root == node());
-		}
+		inline node root() const { return _root; }
+		inline void root(node n) { _root = n; }
+		inline size_t size() const { return count(_root); }
+		inline bool empty() const { return _root == node(); }
 
 		inline void clear() {
 			destroy(_root);

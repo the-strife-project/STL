@@ -220,22 +220,15 @@ namespace std {
 			: _size(0)
 		{}
 
-		inline size_t size() const {
-			return _size;
-		}
-
-		inline bool empty() const {
-			return (_size == 0);
-		}
+		inline size_t size() const { return _size; }
+		inline bool empty() const { return _size == 0; }
 
 		inline void clear() {
 			data.clear();
 			_size = 0;
 		}
 
-		inline iterator insert(const T& e) {
-			return iterator(_insert(e));
-		}
+		inline iterator insert(const T& e) { return iterator(_insert(e)); }
 
 		iterator erase(iterator it) {
 			iterator ret = it;

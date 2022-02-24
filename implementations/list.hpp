@@ -42,13 +42,8 @@ namespace std {
 			first = last = nullptr;
 		}
 
-		inline size_t size() const {
-			return sz;
-		}
-
-		inline bool empty() const {
-			return sz == 0;
-		}
+		inline size_t size() const { return sz; }
+		inline bool empty() const { return sz == 0; }
 
 		// Back.
 		void push_back(T e) {
@@ -62,13 +57,8 @@ namespace std {
 			sz++;
 		}
 
-		inline T& back() {
-			return last->data;
-		}
-
-		inline const T& back() const {
-			return last->data;
-		}
+		inline T& back() { return last->data; }
+		inline const T& back() const { return last->data; }
 
 		// Front.
 		void push_front(T e) {
@@ -89,13 +79,8 @@ namespace std {
 			if(!sz) last = first;
 		}
 
-		inline T& front() {
-			return first->data;
-		}
-
-		inline const T& front() const {
-			return first->data;
-		}
+		inline T& front() { return first->data; }
+		inline const T& front() const { return first->data; }
 
 		// Operators.
 		list<T>& operator=(const list<T>& other) {
@@ -176,11 +161,11 @@ namespace std {
 			}
 
 			inline bool operator==(const iterator& other) const {
-				return (current == other.current);
+				return current == other.current;
 			}
 
 			inline bool operator!=(const iterator& other) const {
-				return (current != other.current);
+				return current != other.current;
 			}
 
 			inline iterator& operator++() {
@@ -194,9 +179,7 @@ namespace std {
 				return ret;
 			}
 
-			inline T& operator*() {
-				return current->data;
-			}
+			inline T& operator*() { return current->data; }
 		};
 
 		class const_iterator {
@@ -215,11 +198,11 @@ namespace std {
 			}
 
 			inline bool operator==(const const_iterator& other) const {
-				return (current == other.current);
+				return current == other.current;
 			}
 
 			inline bool operator!=(const const_iterator& other) const {
-				return (current != other.current);
+				return current != other.current;
 			}
 
 			inline const_iterator& operator++() {

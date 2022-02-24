@@ -44,41 +44,15 @@ namespace std {
 			: data(other.data)
 		{}
 
-		inline bool null() const {
-			return (data == nullptr);
-		}
-
-		inline node parent() const {
-			return data->parent;
-		}
-
-		inline void parent(node n) {
-			data->parent = n;
-		}
-
-		inline node left() const {
-			return data->left;
-		}
-
-		inline void left(node n) {
-			data->left = n;
-		}
-
-		inline node right() const {
-			return data->right;
-		}
-
-		inline void right(node n) {
-			data->right = n;
-		}
-
-		inline size_t height() const {
-			return data->height;
-		}
-
-		inline void height(size_t x) {
-			data->height = x;
-		}
+		inline bool null() const { return (data == nullptr); }
+		inline node parent() const { return data->parent; }
+		inline void parent(node n) { data->parent = n; }
+		inline node left() const { return data->left; }
+		inline void left(node n) { data->left = n; }
+		inline node right() const { return data->right; }
+		inline void right(node n) { data->right = n; }
+		inline size_t height() const { return data->height; }
+		inline void height(size_t x) { data->height = x; }
 
 		pair<size_t, size_t> recomputeHeight() {
 			size_t left_height, right_height;
@@ -102,13 +76,8 @@ namespace std {
 			data = nullptr;
 		}
 
-		inline T& operator*() {
-			return data->tag;
-		}
-
-		inline const T& operator*() const {
-			return data->tag;
-		}
+		inline T& operator*() { return data->tag; }
+		inline const T& operator*() const { return data->tag; }
 
 		inline node& operator=(const node& other) {
 			data = other.data;
@@ -116,11 +85,11 @@ namespace std {
 		}
 
 		inline bool operator==(const node& other) const {
-			return (data == other.data);
+			return data == other.data;
 		}
 
 		inline bool operator!=(const node& other) const {
-			return (data != other.data);
+			return data != other.data;
 		}
 	};
 }

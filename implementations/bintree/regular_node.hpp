@@ -34,54 +34,26 @@ namespace std {
 			: data(nullptr)
 		{}
 
-		_regular_bintree_node(const T& tag) {
-			data = new realnode(tag);
-		}
-
+		_regular_bintree_node(const T& tag) { data = new realnode(tag); }
 		_regular_bintree_node(const node& other)
 			: data(other.data)
 		{}
 
-		inline bool null() const {
-			return (data == nullptr);
-		}
-
-		inline node parent() const {
-			return data->parent;
-		}
-
-		inline void parent(node n) {
-			data->parent = n;
-		}
-
-		inline node left() const {
-			return data->left;
-		}
-
-		inline void left(node n) {
-			data->left = n;
-		}
-
-		inline node right() const {
-			return data->right;
-		}
-
-		inline void right(node n) {
-			data->right = n;
-		}
+		inline bool null() const { return data == nullptr; }
+		inline node parent() const { return data->parent; }
+		inline void parent(node n) { data->parent = n; }
+		inline node left() const { return data->left; }
+		inline void left(node n) { data->left = n; }
+		inline node right() const { return data->right; }
+		inline void right(node n) { data->right = n; }
 
 		inline void destroy() {
 			delete data;
 			data = nullptr;
 		}
 
-		inline T& operator*() {
-			return data->tag;
-		}
-
-		inline const T& operator*() const {
-			return data->tag;
-		}
+		inline T& operator*() { return data->tag; }
+		inline const T& operator*() const { return data->tag; }
 
 		inline node& operator=(const node& other) {
 			data = other.data;
@@ -89,11 +61,11 @@ namespace std {
 		}
 
 		inline bool operator==(const node& other) const {
-			return (data == other.data);
+			return data == other.data;
 		}
 
 		inline bool operator!=(const node& other) const {
-			return (data != other.data);
+			return data != other.data;
 		}
 	};
 }

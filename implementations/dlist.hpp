@@ -33,17 +33,9 @@ namespace std {
 			other.sz = 0;
 		}
 
-		inline ~dlist() {
-			clear();
-		}
-
-		inline size_t size() const {
-			return sz;
-		}
-
-		inline bool empty() const {
-			return sz == 0;
-		}
+		inline ~dlist() { clear(); }
+		inline size_t size() const { return sz; }
+		inline bool empty() const { return sz == 0; }
 
 		void clear() {
 			node* current = first;
@@ -78,13 +70,8 @@ namespace std {
 			if(!sz) first = last;
 		}
 
-		inline T& back() {
-			return last->data;
-		}
-
-		inline const T& back() const {
-			return last->data;
-		}
+		inline T& back() { return last->data; }
+		inline const T& back() const { return last->data; }
 
 		// Front.
 		void push_front(T e) {
@@ -106,13 +93,8 @@ namespace std {
 			if(!sz) last = first;
 		}
 
-		inline T& front() {
-			return first->data;
-		}
-
-		inline const T& front() const {
-			return first->data;
-		}
+		inline T& front() { return first->data; }
+		inline const T& front() const { return first->data; }
 
 		// Operators.
 		// CAREFUL WHEN NEEDED: THIS IS WRONG!
@@ -276,29 +258,12 @@ namespace std {
 			}
 		};
 
-		inline iterator begin() {
-			return iterator(first);
-		}
-
-		inline iterator end() {
-			return iterator(nullptr);
-		}
-
-		inline const_iterator begin() const {
-			return const_iterator(first);
-		}
-
-		inline const_iterator end() const {
-			return const_iterator(nullptr);
-		}
-
-		inline const_iterator cbegin() const {
-			return const_iterator(first);
-		}
-
-		inline const_iterator cend() const {
-			return const_iterator(nullptr);
-		}
+		inline iterator begin() { return iterator(first); }
+		inline iterator end() { return iterator(nullptr); }
+		inline const_iterator begin() const { return const_iterator(first); }
+		inline const_iterator end() const { return const_iterator(nullptr); }
+		inline const_iterator cbegin() const { return const_iterator(first); }
+		inline const_iterator cend() const { return const_iterator(nullptr); }
 
 		iterator insert(iterator it, T e) {
 			// In case there are no elements (begin() == end()), end takes preference.

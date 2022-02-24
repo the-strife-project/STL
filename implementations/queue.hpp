@@ -10,37 +10,14 @@ namespace std {
 		list<T> data;
 
 	public:
-		inline size_t size() const {
-			return data.size();
-		}
-
-		inline bool empty() const {
-			return data.size() == 0;
-		}
-
-		inline void push(T e) {
-			data.push_back(e);
-		}
-
-		inline T& front() {
-			return data.front();
-		}
-
-		inline const T& front() const {
-			return data.front();
-		}
-
-		inline T& back() {
-			return data.back();
-		}
-
-		inline const T& back() const {
-			return data.back();
-		}
-
-		inline void pop() {
-			data.pop_front();
-		}
+		inline size_t size() const { return data.size(); }
+		inline bool empty() const { return data.size() == 0; }
+		inline void push(T e) { data.push_back(e); }
+		inline T& front() { return data.front(); }
+		inline const T& front() const { return data.front(); }
+		inline T& back() { return data.back(); }
+		inline const T& back() const { return data.back(); }
+		inline void pop() { data.pop_front(); }
 
 		inline T frontpop() {
 			T ret = data.front();

@@ -1,6 +1,8 @@
 #ifndef _STDLIB_PAIR_H
 #define _STDLIB_PAIR_H
 
+// Shouldn't this have a Compare?
+
 namespace std {
 	template<typename T, typename Q> struct pair {
 		T f;
@@ -12,15 +14,15 @@ namespace std {
 		{}
 
 		inline bool operator<(const pair& other) const {
-			return (f < other.f);
+			return f < other.f;
 		}
 
 		inline bool operator>(const pair& other) const {
-			return (f > other.f);
+			return f > other.f;
 		}
 
 		inline bool operator==(const pair& other) const {
-			return (f == other.f);
+			return f == other.f;
 		}
 	};
 }

@@ -89,17 +89,9 @@ namespace std {
 				push_back(x);
 		}
 
-		inline void pop_back() {
-			--sz;
-		}
-
-		inline T& back() {
-			return data[sz-1];
-		}
-
-		inline const T& back() const {
-			return data[sz-1];
-		}
+		inline void pop_back() { --sz; }
+		inline T& back() { return data[sz-1]; }
+		inline const T& back() const { return data[sz-1]; }
 
 		// Front.
 		inline void push_front(T e) {
@@ -113,17 +105,9 @@ namespace std {
 				data[i] = other.data[i];
 		}
 
-		inline void pop_front() {
-			disp_left(1, 1);
-		}
-
-		inline T& front() {
-			return data[0];
-		}
-
-		inline const T& front() const {
-			return data[0];
-		}
+		inline void pop_front() { disp_left(1, 1); }
+		inline T& front() { return data[0]; }
+		inline const T& front() const { return data[0]; }
 
 		// General operations.
 		void invert() {
@@ -197,29 +181,12 @@ namespace std {
 		typedef T* iterator;
 		typedef const T* const_iterator;
 
-		inline iterator begin() {
-			return data;
-		}
-
-		inline iterator end() {
-			return data+sz;
-		}
-
-		inline const_iterator begin() const {
-			return data;
-		}
-
-		inline const_iterator end() const {
-			return data+sz;
-		}
-
-		inline const_iterator cbegin() const {
-			return data;
-		}
-
-		inline const_iterator cend() const {
-			return data+sz;
-		}
+		inline iterator begin() { return data; }
+		inline iterator end() { return data+sz; }
+		inline const_iterator begin() const { return data; }
+		inline const_iterator end() const { return data+sz; }
+		inline const_iterator cbegin() const { return data; }
+		inline const_iterator cend() const { return data+sz; }
 	};
 }
 

@@ -89,13 +89,8 @@ public:
 	}
 };
 
-inline preorder_iterator begin_preorder() {
-	return _root;
-}
-
-inline preorder_iterator end_preorder() {
-	return node();
-}
+inline preorder_iterator begin_preorder() { return _root; }
+inline preorder_iterator end_preorder() { return node(); }
 
 class const_preorder_iterator : public _template_preorder_iterator {
 public:
@@ -106,13 +101,8 @@ public:
 	}
 };
 
-inline const_preorder_iterator begin_preorder() const {
-	return _root;
-}
-
-inline const_preorder_iterator end_preorder() const {
-	return node();
-}
+inline const_preorder_iterator begin_preorder() const { return _root; }
+inline const_preorder_iterator end_preorder() const { return node(); }
 
 
 // POSTORDER
@@ -176,9 +166,7 @@ inline postorder_iterator begin_postorder() {
 	return n;
 }
 
-inline postorder_iterator end_postorder() {
-	return node();
-}
+inline postorder_iterator end_postorder() { return node(); }
 
 class const_postorder_iterator : public _template_postorder_iterator {
 public:
@@ -189,13 +177,8 @@ public:
 	}
 };
 
-inline const_postorder_iterator begin_postorder() const {
-	return _root;
-}
-
-inline const_postorder_iterator end_postorder() const {
-	return node();
-}
+inline const_postorder_iterator begin_postorder() const { return _root; }
+inline const_postorder_iterator end_postorder() const { return node(); }
 
 
 // INORDER
@@ -248,9 +231,7 @@ inline inorder_iterator begin_inorder() {
 	return n;
 }
 
-inline inorder_iterator end_inorder() {
-	return node();
-}
+inline inorder_iterator end_inorder() { return node(); }
 
 class const_inorder_iterator : public _template_inorder_iterator {
 public:
@@ -261,13 +242,8 @@ public:
 	}
 };
 
-inline const_inorder_iterator begin_inorder() const {
-	return _root;
-}
-
-inline const_inorder_iterator end_inorder() const {
-	return node();
-}
+inline const_inorder_iterator begin_inorder() const { return _root; }
+inline const_inorder_iterator end_inorder() const { return node(); }
 
 
 // LEVEL
@@ -338,13 +314,8 @@ public:
 	}
 };
 
-inline level_iterator begin_level() {
-	return _root;
-}
-
-inline level_iterator end_level() {
-	return level_iterator();
-}
+inline level_iterator begin_level() { return _root; }
+inline level_iterator end_level() { return level_iterator(); }
 
 class const_level_iterator : public _template_level_iterator {
 public:
@@ -355,10 +326,5 @@ public:
 	}
 };
 
-inline const_level_iterator begin_level() const {
-	return _root;
-}
-
-inline const_level_iterator end_level() const {
-	return node();
-}
+inline const_level_iterator begin_level() const { return _root; }
+inline const_level_iterator end_level() const { return node(); }
