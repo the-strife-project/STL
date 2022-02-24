@@ -5,7 +5,9 @@
 
 #include <set>
 
-template<typename T, typename Compare=less<T>>
-using unordered_set = set<T, Compare>;
+namespace std {
+	template<typename T, typename Compare=less<T>>
+	using unordered_set = set<T, Compare>;
+}
 
 #endif

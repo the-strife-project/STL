@@ -5,7 +5,9 @@
 
 #include <map>
 
-template<typename T, typename Q, typename Compare=less<pair<T, Q>>>
-using unordered_map = map<T, Compare>;
+namespace std {
+	template<typename T, typename Q, typename Compare=less<pair<T, Q>>>
+	using unordered_map = map<T, Compare>;
+}
 
 #endif
