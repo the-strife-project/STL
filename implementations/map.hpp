@@ -21,6 +21,10 @@ namespace std {
 			}
 		}
 	};
+
+	// This is a meme. I'm aware.
+	template<typename T, typename Q, typename Compare=less<pair<T, Q>>>
+	using unordered_map = map<T, Q, Compare>;
 }
 
 #endif
