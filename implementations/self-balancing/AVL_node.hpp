@@ -22,18 +22,16 @@ namespace std {
 			node right;
 			size_t height;
 
-			realnode() {}
+			realnode() = default;
 			realnode(const T& tag)
 				: tag(tag)
 			{}
 		};
 
-		realnode* data;
+		realnode* data = nullptr;
 
 	public:
-		_AVL_node()
-			: data(nullptr)
-		{}
+		_AVL_node() = default;
 
 		_AVL_node(const T& tag) {
 			data = new realnode(tag);

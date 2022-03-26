@@ -27,12 +27,10 @@ namespace std {
 			{}
 		};
 
-		realnode* data;
+		realnode* data = nullptr;
 
 	public:
-		_regular_bintree_node()
-			: data(nullptr)
-		{}
+		_regular_bintree_node() = default;
 
 		_regular_bintree_node(const T& tag) { data = new realnode(tag); }
 		_regular_bintree_node(const node& other)
