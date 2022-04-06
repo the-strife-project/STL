@@ -2,6 +2,7 @@
 #define _STDLIB_VECTOR_H
 
 #include <types>
+#include <cstring>
 
 #define VECTOR_INITIAL_SIZE 1
 
@@ -16,7 +17,7 @@ namespace std {
 			allocated *= 2;
 
 			T* newdata = new T[allocated];
-			for(size_t i=0; i<sz; i++) newdata[i] = data[i];
+			memmove(newdata, data, sz * sizeof(T));
 
 			if(data) delete [] data;
 			data = newdata;
@@ -120,7 +121,8 @@ namespace std {
 		}
 
 		void clear() {
-			delete [] data;
+			if(data)
+				delete [] data;
 			data = new T[VECTOR_INITIAL_SIZE];
 			sz = 0;
 			allocated = VECTOR_INITIAL_SIZE;
