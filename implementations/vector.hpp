@@ -3,32 +3,26 @@
 
 #include <types>
 #include <cstring>
+#include <algorithm>
 
-#define VECTOR_INITIAL_SIZE 1
+#define _STDLIB_VECTOR_INITIAL_SIZE 1
 
 namespace std {
 	template<typename T> class vector {
 	protected:
-		T* data;
-		size_t sz;
-		size_t allocated;
+		T* data = nullptr;
+		size_t sz = 0;
+		size_t allocated = 0;
 
-		void more() {
-			allocated *= 2;
-
-			T* newdata = new T[allocated];
-			memmove(newdata, data, sz * sizeof(T));
-
-			if(data) delete [] data;
-			data = newdata;
+		inline void more() {
+			if(!allocated)
+				reserve(_STDLIB_VECTOR_INITIAL_SIZE);
+			else
+				reserve(allocated * 2);
 		}
 
 	public:
-		vector() {
-			data = new T[VECTOR_INITIAL_SIZE];
-			sz = 0;
-			allocated = VECTOR_INITIAL_SIZE;
-		}
+		vector() = default;
 
 		vector(const vector<T>& other) {
 			sz = other.sz;
@@ -45,18 +39,29 @@ namespace std {
 			other.data = nullptr;
 		}
 
-		~vector() {
+		~vector() { clear(); }
+
+		inline void reserve(size_t n) {
+			allocated = n;
+
+			T* newdata = new T[n];
+			memmove(newdata, data, std::min(sz, n) * sizeof(T));
+
 			if(data) delete [] data;
-			data = nullptr;
+			data = newdata;
 		}
 
-		inline size_t size() const {
-			return sz;
+		inline void resize(size_t n) {
+			reserve(n);
+			sz = n;
 		}
+
+		inline size_t size() const { return sz; }
 
 		void disp_right(size_t idx, size_t count) {
 			if(sz + count > allocated) {
 				// We need to reallocate.
+				// [[ This sucks a lot but I'm too lazy to make it better ]]
 				allocated *= 2;
 
 				T* newdata = new T[allocated];
@@ -80,9 +85,9 @@ namespace std {
 
 		// Back.
 		void push_back(const T& e) {
-			data[sz++] = e;
 			if(sz == allocated)
 				more();
+			data[sz++] = e;
 		}
 
 		void push_back(const vector<T>& other) {
@@ -123,9 +128,8 @@ namespace std {
 		void clear() {
 			if(data)
 				delete [] data;
-			data = new T[VECTOR_INITIAL_SIZE];
-			sz = 0;
-			allocated = VECTOR_INITIAL_SIZE;
+			data = nullptr;
+			sz = allocated = 0;
 		}
 
 		// Operators.
@@ -154,13 +158,8 @@ namespace std {
 			return *this;
 		}
 
-		inline T& operator[](size_t idx) {
-			return data[idx];
-		}
-
-		inline const T& operator[](size_t idx) const {
-			return data[idx];
-		}
+		inline T& operator[](size_t idx) { return data[idx]; }
+		inline const T& operator[](size_t idx) const { return data[idx]; }
 
 		bool operator==(const vector<T>& other) const {
 			if(sz != other.sz) return false;
