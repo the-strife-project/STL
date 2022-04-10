@@ -3,6 +3,8 @@
 
 // Shouldn't this have a Compare?
 
+#include <functional>
+
 namespace std {
 	template<typename T, typename Q> struct pair {
 		T f;
@@ -23,6 +25,15 @@ namespace std {
 
 		inline bool operator==(const pair& other) const {
 			return f == other.f;
+		}
+
+		inline Hash hash() const { return std::hash<T>()(f); }
+	};
+
+	template<typename T, typename Q>
+	struct hash<pair<T, Q>> {
+		inline Hash operator()(const pair<T, Q>& x) const noexcept {
+			return x.hash();
 		}
 	};
 }

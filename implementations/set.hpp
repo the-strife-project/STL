@@ -18,10 +18,6 @@
 namespace std {
 	template<typename T, typename Compare=less<T>>
 	using set = AVL<T, Compare>;
-
-	// This is a meme. I'm aware. TODO.
-	template<typename T, typename Compare=less<T>>
-	using unordered_set = set<T, Compare>;
 }
 
 #endif

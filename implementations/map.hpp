@@ -5,26 +5,22 @@
 #include <AVL>
 
 namespace std {
-	template<typename T, typename Q, typename Compare=less<pair<T, Q>>> class map : public AVL<pair<T, Q>, Compare> {
+	template<typename K, typename V, typename Compare=less<pair<K, V>>> class map : public AVL<pair<K, V>, Compare> {
 	private:
-		typedef AVL<pair<T, Q>, Compare> inh;
+		typedef AVL<pair<K, V>, Compare> inh;
 	public:
 		using inh::AVL;
 
-		inline Q& operator[](const T& t) {
-			auto x = inh::_find(pair<T, Q>(t, Q()));
+		inline V& operator[](const K& t) {
+			auto x = inh::_find(pair<K, V>(t, V()));
 			if(x.f) {
 				return (*(x.s)).s;
 			} else {
-				auto n = inh::_insert(pair<T, Q>(t, Q()));
+				auto n = inh::_insert(pair<K, V>(t, V()));
 				return (*n).s;
 			}
 		}
 	};
-
-	// This is a meme. I'm aware.
-	template<typename T, typename Q, typename Compare=less<pair<T, Q>>>
-	using unordered_map = map<T, Q, Compare>;
 }
 
 #endif

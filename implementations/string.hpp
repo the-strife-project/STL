@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <list>
+#include <functional>
 
 namespace std {
 	class string : public vector<char> {
@@ -122,6 +123,28 @@ namespace std {
 			}
 
 			return false;
+		}
+
+		// I truly don't know how to make this work in the ecosystem
+		// Templates don't seem to work
+		// I've just given up
+		static const size_t hash_p = 31;
+		static const size_t hash_m = 1000000009;
+		inline virtual Hash hash() const {
+			// Polynomial rolling hash function
+			size_t ret = 0;
+			size_t ppow = 1;
+			for(char c : *this) {
+				ret = (ret + c * ppow) % hash_m;
+				ppow = (ppow * hash_p) % hash_m;
+			}
+			return ret;
+		}
+	};
+
+	template<> struct hash<string> {
+		inline Hash operator()(const string& x) const noexcept {
+			return x.hash();
 		}
 	};
 }

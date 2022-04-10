@@ -4,18 +4,13 @@
 #include <types>
 #include <utility>
 #include <algorithm>
+#include <vector>
+#include <functional>
 
 // Welcome to the Robin Hood Hash Table
 // The generic version of kernel's HT64
 
 namespace std {
-	// Hashes of atomic types
-	typedef size_t Hash;
-	// This should include pretty much all ints
-	inline Hash hash(size_t val) { return val; }
-	// And this should include all pointers
-	inline Hash hash(void* val) { return (size_t)val; }
-
 	// MAX_USAGE is given in percentage (default is 80%)
 	template<typename T, size_t MAX_USAGE=80> class RHHT {
 	private:
@@ -133,6 +128,7 @@ namespace std {
 			data = typename std::vector<Bucket>();
 			data.resize(odata.size() * 2);
 
+			filledBuckets = 0;
 			for(auto const& x : odata)
 				add(x.val);
 		}
@@ -145,28 +141,18 @@ namespace std {
 			Hash h = _hash(val);
 			Hash origh = h;
 
-			if(data[h].val == val)
-				return &data[h];
-			++h;
-
-			size_t psl = 1;
-			while(true) {
-				if(data[h].val == val)
-					return &data[h];
-
-				// Two cases: empty or higher PSL
+			bool first = true;
+			size_t psl = 0;
+			while(first || h != origh) {
 				if(!data[h].filled || data[h].psl > psl)
 					return nullptr;
 
-				// Two passes, same as add()
-				if(h == origh) {
-					break;
-				} else if(h >= data.size()-1) {
-					// First pass complete
+				if(data[h].val == val)
+					return &data[h];
+
+				if(first) first = false;
+				if(++h == data.size())
 					h = 0;
-				} else {
-					++h;
-				}
 
 				++psl;
 			}
@@ -177,12 +163,12 @@ namespace std {
 		}
 
 		inline Hash _hash(const T& val) const {
-			// Assuming this function exists
-			return hash(val) % data.size();
+			// Hashing is not handled here, go read <hash>
+			return std::hash<T>()(val) % data.size();
 		}
 
 	public:
-		void add(const T& val) {
+		iterator add(const T& val) {
 			if(!data.size()) {
 				more();
 			} else {
@@ -191,48 +177,56 @@ namespace std {
 					more();
 			}
 
+			// This method can't fail, so...
+			++filledBuckets;
+
 			Hash h = _hash(val);
 			Hash origh = h;
 
-			// Is the optimal bucket free?
-			if(!data[h].filled) {
-				data[h] = Bucket(val);
-				return;
-			}
-
 			// Nope. Here we go
+			bool retset = false;
+			iterator ret;
 			Bucket bucket(val);
-			++h;
-			++bucket.psl;
-			while(true) {
+
+			bool first = true;
+			while(first || h != origh) {
 				if(!data[h].filled) {
 					data[h] = bucket;
-					return;
+					if(!retset)
+						ret = iterator(&data[h], data.end());
+					return ret;
 				}
+
+				// No double insertions!
+				if(data[h].val == bucket.val) {
+					// This can only happen when bucket has not been swapped
+					return iterator(&data[h], data.end());
+				}
+
+				if(first) first = false;
 
 				// Used. Compare PSLs
-				if(bucket.psl > data[h].psl)
-					std::swap(bucket, data[h]); // Swap!
+				if(bucket.psl > data[h].psl) {
+					if(!retset) {
+						ret = iterator(&data[h], data.end());
+						retset = true;
+					}
 
-				// Two passes:
-				//   First, from h to the end
-				//   Then, from the beginning to h
-				if(h == origh) {
-					// Second pass complete
-					break;
-				} else if(h >= data.size()-1) {
-					// First pass complete, start the second
-					h = 0;
-				} else {
-					++h;
+					std::swap(bucket, data[h]);
 				}
+
+				if(++h == data.size())
+					h = 0;
 
 				++bucket.psl;
 			}
 
 			// This can't happen
 			*(uint64_t*)0x12345 = 0;
+			return end();
 		}
+
+		inline iterator insert(const T& val) { return add(val); }
 
 		inline iterator find(const T& val) {
 			// Some black magic due to std::vector implementation
