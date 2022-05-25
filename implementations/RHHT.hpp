@@ -177,7 +177,6 @@ namespace std {
 					more();
 			}
 
-			// This method can't fail, so...
 			++filledBuckets;
 
 			Hash h = _hash(val);
@@ -200,6 +199,7 @@ namespace std {
 				// No double insertions!
 				if(data[h].val == bucket.val) {
 					// This can only happen when bucket has not been swapped
+					--filledBuckets; // Roll back!
 					return iterator(&data[h], data.end());
 				}
 
