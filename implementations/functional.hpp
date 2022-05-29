@@ -9,15 +9,18 @@ namespace std {
 	// Primary class template hash
 	template<typename T> struct hash;
 
-	// Trivial hashes
-	/*#define _STDLIB_TRIVIAL_HASH(x) \
-	template<> struct hash<x> { \
-		inline Hash operator()(
-	};*/
-
 	// Specialization for ints
-	template<> struct hash<size_t> {
-		inline Hash operator()(const size_t& x) const noexcept { return x; }
+	template<> struct hash<uint8_t> {
+		inline Hash operator()(const uint8_t& x) const noexcept { return x; }
+	};
+	template<> struct hash<uint16_t> {
+		inline Hash operator()(const uint16_t& x) const noexcept { return x; }
+	};
+	template<> struct hash<uint32_t> {
+		inline Hash operator()(const uint32_t& x) const noexcept { return x; }
+	};
+	template<> struct hash<uint64_t> {
+		inline Hash operator()(const uint64_t& x) const noexcept { return x; }
 	};
 }
 
