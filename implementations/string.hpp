@@ -64,8 +64,8 @@ namespace std {
 			return *this;
 		}
 
-		list<string> split(char c) const {
-			list<string> ret;
+		vector<string> split(char c) const {
+			vector<string> ret;
 
 			string aux;
 			auto it = begin();
@@ -85,7 +85,7 @@ namespace std {
 			return vector<char>::operator==(other);
 		}
 
-		bool operator==(const char* other) const {
+		inline bool operator==(const char* other) const {
 			return (*this == string(other));
 		}
 

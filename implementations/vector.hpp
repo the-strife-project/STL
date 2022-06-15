@@ -29,7 +29,8 @@ namespace std {
 			allocated = other.allocated;
 
 			data = new T[allocated];
-			for(size_t i=0; i<sz; i++) data[i] = other.data[i];
+			for(size_t i=0; i<sz; i++)
+				data[i] = other.data[i];
 		}
 
 		vector(vector<T>&& other) {
@@ -37,15 +38,18 @@ namespace std {
 			allocated = other.allocated;
 			data = other.data;
 			other.data = nullptr;
+			other.sz = other.allocated = 0;
 		}
 
 		~vector() { clear(); }
 
 		inline void reserve(size_t n) {
 			allocated = n;
+			sz = std::min(sz, n);
 
 			T* newdata = new T[n];
-			memmove(newdata, data, std::min(sz, n) * sizeof(T));
+			for(size_t i=0; i<sz; ++i)
+				newdata[i] = std::move(data[i]);
 
 			if(data) delete [] data;
 			data = newdata;
