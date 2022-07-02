@@ -33,8 +33,7 @@ namespace std {
 
 		class iterator {
 		private:
-			typename std::vector<Bucket>::iterator it;
-			typename std::vector<Bucket>::iterator itend;
+			typename std::vector<Bucket>::iterator it, itend;
 			iterator(typename std::vector<Bucket>::iterator it_,
 					 typename std::vector<Bucket>::iterator itend_)
 			{
@@ -50,8 +49,9 @@ namespace std {
 
 			inline iterator& operator++() {
 				// Keep going forward until filled or data.end()
-				while(it != itend) {
-					++it;
+				if(it == itend)
+					return *this;
+				while(++it != itend) {
 					if((*it).filled)
 						break;
 				}
@@ -73,8 +73,7 @@ namespace std {
 
 		class const_iterator {
 		private:
-			typename std::vector<Bucket>::const_iterator it;
-			typename std::vector<Bucket>::const_iterator itend;
+			typename std::vector<Bucket>::const_iterator it, itend;
 			const_iterator(typename std::vector<Bucket>::const_iterator it_,
 						   typename std::vector<Bucket>::const_iterator itend_)
 			{
@@ -89,8 +88,9 @@ namespace std {
 			const_iterator() {}
 
 			inline const_iterator& operator++() {
-				while(it != itend) {
-					++it;
+				if(it == itend)
+					return *this;
+				while(++it != itend) {
 					if((*it).filled)
 						break;
 				}
