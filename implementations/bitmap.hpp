@@ -1,8 +1,6 @@
 #ifndef _STDLIB_BITMAP_H
 #define _STDLIB_BITMAP_H
 
-// iirc this implementation sucks. Have to check. TODO?
-
 namespace std {
 	class bitmap {
 	private:
