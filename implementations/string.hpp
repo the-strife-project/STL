@@ -89,6 +89,10 @@ namespace std {
 			return (*this == string(other));
 		}
 
+		inline bool operator!=(const string& other) const {
+			return !(*this == other);
+		}
+
 		inline bool operator!=(const char* other) const {
 			return !(*this == other);
 		}
