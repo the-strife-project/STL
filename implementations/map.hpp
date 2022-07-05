@@ -20,6 +20,11 @@ namespace std {
 				return (*n).s;
 			}
 		}
+
+		inline bool has(const K& k) {
+			auto x = inh::_find(pair<K, V>(k, V()));
+			return x.f;
+		}
 	};
 }
 

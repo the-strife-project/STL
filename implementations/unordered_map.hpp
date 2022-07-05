@@ -1,7 +1,7 @@
 #ifndef _STDLIB_UNORDERED_MAP_HPP
 #define _STDLIB_UNORDERED_MAP_HPP
 
-#include <RHHT>
+/*#include <RHHT>
 #include <pair>
 
 namespace std {
@@ -44,6 +44,11 @@ namespace std {
 
 		inline size_t size() const { return data.size(); }
 	};
+}*/
+
+#include <map>
+namespace std {
+	template<typename K, typename V> using unordered_map = map<K, V>;
 }
 
 #endif
