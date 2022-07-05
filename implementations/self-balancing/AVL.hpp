@@ -13,7 +13,7 @@ namespace std {
 	protected:
 		typedef _AVL_node<T> node;
 
-		void ballance(node n) {
+		void balance(node n) {
 			while(!n.null()) {
 				// [0] Update height.
 				size_t left_height, right_height;
@@ -70,14 +70,14 @@ namespace std {
 
 		inline node _insert(const T& e) override {
 			node inserted = BST<T, node, Compare>::_insert(e);
-			ballance(inserted.parent());
+			balance(inserted.parent());
 			return inserted;
 		}
 
 		inline void _erase(node n) override {
 			node parent = n.parent();
 			BST<T, node, Compare>::_erase(n);
-			ballance(parent);
+			balance(parent);
 		}
 	};
 }

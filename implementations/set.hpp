@@ -17,7 +17,21 @@
 
 namespace std {
 	template<typename T, typename Compare=less<T>>
-	using set = AVL<T, Compare>;
+	class set : public AVL<T, Compare> {
+	private:
+		typedef AVL<T, Compare> inh;
+
+	public:
+		using inh::AVL;
+
+		inline void insert(const T& t) {
+			inh::_insert(t);
+		}
+
+		inline void add(const T& t) {
+			inh::_insert(t);
+		}
+	};
 }
 
 #endif
