@@ -28,9 +28,11 @@ namespace std {
 			sz = other.sz;
 			allocated = other.allocated;
 
-			data = new T[allocated];
-			for(size_t i=0; i<sz; i++)
-				data[i] = other.data[i];
+			if(allocated) {
+				data = new T[allocated];
+				for(size_t i=0; i<sz; i++)
+					data[i] = other.data[i];
+			}
 		}
 
 		vector(vector<T>&& other) {
