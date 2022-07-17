@@ -1,9 +1,12 @@
 #ifndef _STDLIB_UNORDERED_MAP_HPP
 #define _STDLIB_UNORDERED_MAP_HPP
 
-/*#include <RHHT>
+#include <RHHT>
 #include <pair>
 
+#define LIE
+
+#ifndef LIE
 namespace std {
 	template<typename K, typename V>
 	class unordered_map {
@@ -42,13 +45,18 @@ namespace std {
 			return data.has(KV(key, V()));
 		}
 
+		inline void erase(iterator it) { data.erase(it); }
+		inline void erase(const K& key) { data.erase(find(key)); }
+		inline void erase(const KV& kv) { data.erase(kv); }
+
 		inline size_t size() const { return data.size(); }
 	};
-}*/
-
+}
+#else
 #include <map>
 namespace std {
 	template<typename K, typename V> using unordered_map = map<K, V>;
 }
+#endif
 
 #endif

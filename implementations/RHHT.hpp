@@ -16,6 +16,7 @@ namespace std {
 	private:
 		struct Bucket {
 			bool filled = false;
+			bool tombstone = false;
 			T val;
 			size_t psl = 0;
 
@@ -42,6 +43,7 @@ namespace std {
 				if(it != itend && !(*it).filled)
 					++*this;
 			}
+			inline void erase() { (*it).tombstone = true; }
 			friend class RHHT;
 
 		public:
@@ -246,9 +248,8 @@ namespace std {
 		}
 
 		inline bool has(const T& val) const { return find(val) != cend(); }
-
-		//void erase(const K& key) {}
-
+		/*inline void erase(iterator it) { it.erase(); }
+		inline void erase(const T& val) { erase(find(val)); }*/
 		inline size_t size() const { return filledBuckets; }
 	};
 };
