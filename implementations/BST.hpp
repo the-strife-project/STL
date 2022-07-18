@@ -53,7 +53,7 @@ namespace std {
 				ret = data.root();
 			} else {
 				if(found.f)
-					return node();
+					return found.s;
 
 				if(Compare()(e, *(found.s))) {
 					data.insert_left(found.s, e);

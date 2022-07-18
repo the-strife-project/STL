@@ -8,7 +8,6 @@
 #include <functional>
 
 // Welcome to the Robin Hood Hash Table
-// The generic version of kernel's HT64
 
 namespace std {
 	// MAX_USAGE is given in percentage (default is 80%)
@@ -16,7 +15,6 @@ namespace std {
 	private:
 		struct Bucket {
 			bool filled = false;
-			bool tombstone = false;
 			T val;
 			size_t psl = 0;
 
@@ -43,7 +41,6 @@ namespace std {
 				if(it != itend && !(*it).filled)
 					++*this;
 			}
-			inline void erase() { (*it).tombstone = true; }
 			friend class RHHT;
 
 		public:
@@ -126,13 +123,19 @@ namespace std {
 			}
 
 			// Allocate twice the number of buckets
-			typename std::vector<Bucket> odata = std::move(data);
-			data = typename std::vector<Bucket>();
+			std::vector<Bucket> odata = std::move(data);
+			data.clear();
 			data.resize(odata.size() * 2);
 
 			filledBuckets = 0;
 			for(auto const& x : odata)
-				add(x.val);
+				if(x.filled)
+					add(x.val);
+		}
+
+		inline Hash _hash(const T& val) const {
+			// Hashing is not handled here, go read <hash>
+			return std::hash<T>()(val) % data.size();
 		}
 
 		const Bucket* lookup(const T& val) const {
@@ -141,32 +144,19 @@ namespace std {
 				return nullptr;
 
 			Hash h = _hash(val);
-			Hash origh = h;
-
-			bool first = true;
 			size_t psl = 0;
-			while(first || h != origh) {
-				if(!data[h].filled || data[h].psl > psl)
+			while(true) {
+				if(!data[h].filled || psl > data[h].psl)
 					return nullptr;
 
 				if(data[h].val == val)
 					return &data[h];
 
-				if(first) first = false;
 				if(++h == data.size())
 					h = 0;
 
 				++psl;
 			}
-
-			// In some very specific occasions, second pass might not find
-			//   an empty bucket.
-			return nullptr;
-		}
-
-		inline Hash _hash(const T& val) const {
-			// Hashing is not handled here, go read <hash>
-			return std::hash<T>()(val) % data.size();
 		}
 
 	public:
@@ -182,17 +172,14 @@ namespace std {
 			++filledBuckets;
 
 			Hash h = _hash(val);
-			Hash origh = h;
 
-			// Nope. Here we go
 			bool retset = false;
 			iterator ret;
 			Bucket bucket(val);
 
-			bool first = true;
-			while(first || h != origh) {
+			while(true) {
 				if(!data[h].filled) {
-					data[h] = bucket;
+					data[h] = std::move(bucket);
 					if(!retset)
 						ret = iterator(&data[h], data.end());
 					return ret;
@@ -204,8 +191,6 @@ namespace std {
 					--filledBuckets; // Roll back!
 					return iterator(&data[h], data.end());
 				}
-
-				if(first) first = false;
 
 				// Used. Compare PSLs
 				if(bucket.psl > data[h].psl) {
@@ -222,10 +207,34 @@ namespace std {
 
 				++bucket.psl;
 			}
+		}
 
-			// This can't happen
-			*(uint64_t*)0x12345 = 0;
-			return end();
+		inline void clear() {
+			data.clear();
+			filledBuckets = 0;
+		}
+
+		void erase(const T& val) {
+			const Bucket* bucket = lookup(val);
+			if(!bucket)
+				return;
+
+			Hash h = bucket - &data[0]; // Black magic
+
+			data[h].filled = false;
+			data[h].psl = 0;
+			if(++h == data.size())
+				h = 0;
+
+			// Push all PSL>0 back
+			while(data[h].filled && data[h].psl) {
+				// Have to push back
+				Hash prev = h ? h-1 : data.size()-1;
+				std::swap(data[prev], data[h]);
+				data[prev].psl--;
+				if(++h == data.size())
+					h = 0;
+			}
 		}
 
 		inline iterator insert(const T& val) { return add(val); }
@@ -248,8 +257,6 @@ namespace std {
 		}
 
 		inline bool has(const T& val) const { return find(val) != cend(); }
-		/*inline void erase(iterator it) { it.erase(); }
-		inline void erase(const T& val) { erase(find(val)); }*/
 		inline size_t size() const { return filledBuckets; }
 	};
 };

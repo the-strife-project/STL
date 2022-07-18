@@ -1,12 +1,9 @@
 #ifndef _STDLIB_UNORDERED_MAP_HPP
 #define _STDLIB_UNORDERED_MAP_HPP
 
-#include <RHHT>
 #include <pair>
+#include <RHHT>
 
-#define LIE
-
-#ifndef LIE
 namespace std {
 	template<typename K, typename V>
 	class unordered_map {
@@ -52,11 +49,5 @@ namespace std {
 		inline size_t size() const { return data.size(); }
 	};
 }
-#else
-#include <map>
-namespace std {
-	template<typename K, typename V> using unordered_map = map<K, V>;
-}
-#endif
 
 #endif
