@@ -25,7 +25,7 @@ namespace std {
 			return true;
 		}
 
-		inline const char* c_str() {
+		inline char* c_str() {
 			// Here's the idea: push and pop. The zero will be left there. Pop never frees.
 			*this += 0;
 			this->pop_back();
